@@ -1,0 +1,32 @@
+---
+
+- name: install_golang
+  hosts: all
+  gather_facts: false
+  vars:
+    version: 1.20.1
+  tasks:
+    - name: Download go tar file
+      command: wget https://go.dev/dl/go{{version}}.linux-amd64.tar.gz
+      tags: golang
+      
+    - name: Extract and move new go folder to /usr/local
+      command: tar -C /usr/local -xzf go{{version}}.linux-amd64.tar.gz
+      become: true
+      tags: golang
+
+    - name: Delete downloaded tar file
+      shell: rm -rf go{{version}}.linux-amd64.tar.gz*
+
+    - name: export GOPATH
+      lineinfile:
+        dest: $HOME/.bashrc
+        line: 'export GOPATH=$HOME/go'
+      tags: golang
+      
+    - name: update PATH environment variable
+      lineinfile:
+        path: $HOME/.bashrc
+        line: 'export PATH=$PATH:/usr/local/go/bin:$GOPATH/bin'
+      tags: golang
+      

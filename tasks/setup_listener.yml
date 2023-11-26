@@ -1,0 +1,76 @@
+---
+
+- name: setup_listener
+  hosts: all
+  gather_facts: false
+  tasks:       
+    - name: Install interactsh-server
+      command: go install -v github.com/projectdiscovery/interactsh/cmd/interactsh-server@latest
+      
+    - name: Install interactsh-client
+      command: go install -v github.com/projectdiscovery/interactsh/cmd/interactsh-client@latest
+      
+    - name: Install notify
+      command: go install -v github.com/projectdiscovery/notify/cmd/notify@latest
+
+    - name: Install anew
+      command: go install -v github.com/tomnomnom/anew@latest
+      
+    - name: Update repositories cache and install "jq" package
+      ansible.builtin.yum:
+        name: jq
+        update_cache: yes
+      become: true
+      
+    - name: Copy subresources
+      ansible.builtin.copy:
+        src: ../files/www/
+        dest: /opt/www/
+        owner: ec2-user
+        group: ec2-user
+        mode: '0644'
+      become: true
+
+    - name: Copy bash script
+      ansible.builtin.copy:
+        src:  ../files/bin/start_listener.sh
+        dest: /opt/start_listener.sh
+        owner: ec2-user
+        group: ec2-user
+        mode: '0544'
+      become: true
+      
+    - name: Copy bash script
+      ansible.builtin.copy:
+        src:  ../files/bin/setup_https.sh
+        dest: /opt/setup_https.sh
+        owner: ec2-user
+        group: ec2-user
+        mode: '0544'
+      become: true
+        
+    - name: Create notify config directory
+      ansible.builtin.file:
+        path: /root/.config/notify/
+        state: directory
+        mode: '0444'
+      become: true
+        
+    - name: Copy notify config
+      ansible.builtin.copy:
+        src:  ../files/conf/provider-config.yaml
+        dest: /root/.config/notify/provider-config.yaml
+        owner: ec2-user
+        group: ec2-user
+        mode: '0644'
+      become: true
+      
+    - name: Copy ooblister service file
+      ansible.builtin.copy:
+        src:  ../files/conf/ooblistener.service
+        dest: /etc/systemd/system/ooblistener.service
+        owner: ec2-user
+        group: ec2-user
+        mode: '0644'
+      become: true
+      

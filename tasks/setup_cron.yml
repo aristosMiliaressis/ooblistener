@@ -1,0 +1,19 @@
+---
+
+- name: setup_cron
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: Update repositories cache and install "cronie" package
+      ansible.builtin.yum:
+        name: cronie
+        update_cache: yes
+      become: true
+    
+    - name: enable crond
+      command: systemctl enable crond
+      become: true
+      
+    - name: start crond
+      command: systemctl start crond
+      become: true
