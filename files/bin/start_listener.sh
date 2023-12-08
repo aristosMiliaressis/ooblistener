@@ -21,7 +21,7 @@ then
 fi
 token=$(cat /opt/token.txt)
 
-interactsh-server -hi /opt/www/ssrf.html -se -dr -hd /opt/www -d $DOMAIN -ip $IP -csh nginx -dv -wc -t "$token" &
+interactsh-server -hi /opt/www/index.html -se -dr -hd /opt/www -d $DOMAIN -ip $IP -csh nginx -dv -wc -t "$token" &
 
 sleep 2
 
