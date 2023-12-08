@@ -9,13 +9,6 @@ resource "discord_category_channel" "general" {
   server_id = discord_server.this.id
 }
 
-resource "discord_text_channel" "all" {
-  name                     = "all"
-  server_id                = discord_server.this.id
-  category                 = discord_category_channel.general.id
-  sync_perms_with_category = false
-}
-
 resource "discord_text_channel" "smtp" {
   name                     = "smtp"
   server_id                = discord_server.this.id
@@ -37,18 +30,6 @@ resource "discord_text_channel" "http" {
   sync_perms_with_category = false
 }
 
-resource "discord_text_channel" "exfil" {
-  name                     = "exfil"
-  server_id                = discord_server.this.id
-  category                 = discord_category_channel.general.id
-  sync_perms_with_category = false
-}
-
-resource "discord_webhook" "all" {
-  channel_id = discord_text_channel.all.id
-  name       = local.bot_name
-}
-
 resource "discord_webhook" "dns" {
   channel_id = discord_text_channel.dns.id
   name       = local.bot_name
@@ -64,12 +45,7 @@ resource "discord_webhook" "http" {
   name       = local.bot_name
 }
 
-resource "discord_webhook" "exfil" {
-  channel_id = discord_text_channel.exfil.id
-  name       = local.bot_name
-}
-
 resource "discord_invite" "this" {
-  channel_id = resource.discord_text_channel.all.id
+  channel_id = resource.discord_text_channel.dns.id
   max_age    = 0
 }

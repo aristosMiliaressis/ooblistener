@@ -1,8 +1,3 @@
-output "all_channel_webhook" {
-  value     = discord_webhook.all.url
-  sensitive = true
-}
-
 output "dns_channel_webhook" {
   value     = discord_webhook.dns.url
   sensitive = true
@@ -15,11 +10,6 @@ output "smtp_channel_webhook" {
 
 output "http_channel_webhook" {
   value     = discord_webhook.http.url
-  sensitive = true
-}
-
-output "exfil_channel_webhook" {
-  value     = discord_webhook.exfil.url
   sensitive = true
 }
 
