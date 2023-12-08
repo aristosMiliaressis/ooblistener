@@ -1,5 +1,5 @@
 #!/bin/bash
-set -ouex
+set -ux
 
 if [ "$EUID" -ne 0 ]
 then
@@ -25,11 +25,9 @@ interactsh-server -hi /opt/www/ssrf.html -se -dr -hd /opt/www -d $DOMAIN -ip $IP
 
 sleep 2
 
-interactsh-client -json -o /opt/pingbacks.json -s "127.0.0.1" -t "$token" | notify -silent -bulk -provider discord -id oob &
-
 while true 
 do
-    sleep 2
+    timeout 8s interactsh-client -json -o /opt/pingbacks.json -s "127.0.0.1" -t "$token"
 
     cat /opt/pingbacks.json \
         | grep -iv 'Sec-fetch-Site: same-origin' \
