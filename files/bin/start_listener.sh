@@ -32,25 +32,16 @@ do
     cat /opt/pingbacks.json \
         | grep -iv 'Sec-fetch-Site: same-origin' \
         | jq -c 'select( .protocol == "http" )' \
-        | anew /opt/http-pingbacks.json \
-        | jq -c 'select( ."unique-id" != "exfil.u.'$DOMAIN'" )' \
-        | jq -r '"\(."remote-address")\n\(."raw-request")"' \
+        | jq -r '"\(."remote-address") \(.asninfo[0].org)\n\(."raw-request")"' \
         | notify -silent -bulk -provider discord -id http
-
-    cat /opt/http-pingbacks.json | jq -c 'select( ."unique-id" == "exfil.u.'$DOMAIN'" )' \
-        | anew /opt/exfil.json \
-        | jq -r '"\(."remote-address")\n\(."raw-request")"' \
-        | notify -silent -bulk -provider discord -id exfil
 
     cat /opt/pingbacks.json \
         | jq -c 'select( .protocol == "dns" )' \
-        | anew /opt/dns-pingbacks.json \
-        | jq -r '"\(."remote-address")\n\(."raw-request")"' \
+        | jq -r '"\(."remote-address") \(.asninfo[0].org)\n\(."raw-request")"' \
         | notify -silent -bulk -provider discord -id dns
     
     cat /opt/pingbacks.json \
         | jq -c 'select( .protocol == "smtp" )' \
-        | anew /opt/smtp-pingbacks.json \
-        | jq -r '"\(."remote-address")\n\(."raw-request")"' \
+        | jq -r '"\(."remote-address") \(.asninfo[0].org)\n\(."raw-request")"' \
         | notify -silent -bulk -provider discord -id smtp
 done
