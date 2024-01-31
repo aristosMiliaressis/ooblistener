@@ -24,7 +24,7 @@ source "amazon-ebs" "ooblistener" {
 
   source_ami_filter {
     filters = {
-      name                = "al2023-ami-2023.2.*.1-x86_64"
+      name                = "al2023-ami-2023.*.1-x86_64"
       root-device-type    = "ebs"
       virtualization-type = "hvm"
     }
@@ -48,11 +48,19 @@ build {
   }
 
   provisioner "ansible" {
-    playbook_file = "./tasks/install_golang.yml"
+    playbook_file = "./tasks/setup_golang.yml"
   }
 
   provisioner "ansible" {
-    playbook_file = "./tasks/setup_listener.yml"
+    playbook_file = "./tasks/setup_notify.yml"
+  }
+  
+  provisioner "ansible" {
+    playbook_file = "./tasks/setup_interactsh.yml"
+  }
+  
+  provisioner "ansible" {
+    playbook_file = "./tasks/setup_xsshunterlite.yml"
   }
   
   provisioner "ansible" {

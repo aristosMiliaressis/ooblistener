@@ -35,5 +35,6 @@ override.tf.json
 .terraformrc
 terraform.rc
 files/conf/*.yaml
+**/*.pem
 
 *.tmp

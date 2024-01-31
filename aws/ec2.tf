@@ -103,12 +103,23 @@ resource "aws_security_group" "this" {
       security_groups  = []
     },
     {
-      from_port        = 389
-      to_port          = 389
+      from_port        = 4
+      to_port          = 4
       protocol         = "tcp"
       cidr_blocks      = ["0.0.0.0/0"]
       ipv6_cidr_blocks = ["::/0"]
-      description      = "allow-ldap"
+      description      = "allow-https-for-interactsh"
+      prefix_list_ids  = []
+      self             = false
+      security_groups  = []
+    },
+    {
+      from_port        = 8
+      to_port          = 8
+      protocol         = "tcp"
+      cidr_blocks      = ["0.0.0.0/0"]
+      ipv6_cidr_blocks = ["::/0"]
+      description      = "allow-http-for-interactsh"
       prefix_list_ids  = []
       self             = false
       security_groups  = []

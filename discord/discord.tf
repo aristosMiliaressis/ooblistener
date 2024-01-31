@@ -30,6 +30,13 @@ resource "discord_text_channel" "http" {
   sync_perms_with_category = false
 }
 
+resource "discord_text_channel" "xss" {
+  name                     = "xss"
+  server_id                = discord_server.this.id
+  category                 = discord_category_channel.general.id
+  sync_perms_with_category = false
+}
+
 resource "discord_webhook" "dns" {
   channel_id = discord_text_channel.dns.id
   name       = local.bot_name
@@ -42,6 +49,11 @@ resource "discord_webhook" "smtp" {
 
 resource "discord_webhook" "http" {
   channel_id = discord_text_channel.http.id
+  name       = local.bot_name
+}
+
+resource "discord_webhook" "xss" {
+  channel_id = discord_text_channel.xss.id
   name       = local.bot_name
 }
 

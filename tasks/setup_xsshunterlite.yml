@@ -1,0 +1,64 @@
+---
+ 
+- name: setup_xsshunterlite
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: Update repositories cache and install "httpd" & "mod_ssl" package
+      ansible.builtin.dnf:
+        name: 
+          - httpd
+          - mod_ssl
+        update_cache: yes
+      become: true
+
+    - name: Install "mod_wsgi" rpm package
+      ansible.builtin.dnf:
+        name: https://rpmfind.net/linux/centos-stream/9-stream/AppStream/x86_64/os/Packages/python3-mod_wsgi-4.7.1-11.el9.x86_64.rpm
+        disable_gpg_check: true
+        state: present
+      become: true
+      
+    - name: Update repositories cache and install "python3-pip" package
+      ansible.builtin.dnf:
+        name: python3-pip
+        update_cache: yes
+      become: true
+      
+    - name: Install flask & flask_cors
+      ansible.builtin.pip:
+        name: 
+          - flask
+          - flask_cors
+          - mod_wsgi
+      become: true
+     
+    - name: Copy bash script
+      ansible.builtin.copy:
+        src:  ../files/bin/start_xsshunterlite.sh
+        dest: /opt/start_xsshunterlite.sh
+        owner: ec2-user
+        group: ec2-user
+        mode: '0544'
+      become: true
+
+    - name: Copy api source code
+      ansible.builtin.copy:
+        src: ../files/api/
+        dest: /var/www/xsshunterlite/
+        owner: ec2-user
+        group: ec2-user
+        mode: '0644'
+      become: true
+      
+    - name: chmod xsshunterlite directory
+      ansible.builtin.file:
+        path: /var/www/xsshunterlite
+        state: directory
+        mode: '0777'
+
+    - name: chmod notify_xss script
+      ansible.builtin.file:
+        path: /var/www/xsshunterlite/notify_xss.sh
+        state: file
+        mode: '0755'

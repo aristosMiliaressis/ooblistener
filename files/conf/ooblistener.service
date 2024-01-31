@@ -6,7 +6,7 @@ After=crond.service
 [Service]
 User=root
 WorkingDirectory=/opt
-ExecStart=/bin/bash -c '/opt/start_listener.sh'
+ExecStart=/bin/bash -c '/opt/start_interactsh.sh'
 StandardOutput=syslog
 StandardError=syslog
 SyslogIdentifier=ooblistener

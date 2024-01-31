@@ -12,7 +12,7 @@ profile="default"
 region=$(aws configure get region --profile $profile)
 
 mkdir ~/.ssh 2>/dev/null
-ssh-keygen -t ed25519 -f ~/.ssh/ooblistener -C ooblistener -N ""
+[[ ! -f ~/.ssh/ooblistener ]] && ssh-keygen -t ed25519 -f ~/.ssh/ooblistener -C ooblistener -N ""
 
 public_key=$(cat ~/.ssh/ooblistener.pub)
 
@@ -28,14 +28,9 @@ printf "[listener]\n$ec2_ip" > inventory
 sleep 5
 ssh-keyscan -H $ec2_ip | anew ~/.ssh/known_hosts
 
-ansible listener -i inventory -m copy \
-    -a "content=$domain dest=/opt/domain.txt" \
-    --become --key-file ~/.ssh/ooblistener
-ansible listener -i inventory \
-    -a "systemctl start ooblistener" \
-    --become --key-file ~/.ssh/ooblistener 
+ansible-playbook ./tasks/start_ooblistener.yml -i inventory --extra-vars "domain=$domain"
 
 echo "All Done!"
 echo "Now add the following NS records on your domain registry and wait for them to propagate"
-printf "$domain\tNS\tec2-$(echo $ec2_ip | tr '.' '-').compute-1.amazonaws.com.\n"
+printf "$domain\tNS\t$(dig +short -x $ec2_ip)\n"
 printf "$domain\tNS\tone.one.one.one.\n"

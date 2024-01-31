@@ -1,0 +1,22 @@
+---
+
+- name: start_ooblistener
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: Write domain name to file
+      ansible.builtin.copy:
+        content: "{{ domain }}"
+        dest: /opt/domain.txt
+        owner: ec2-user
+        group: ec2-user
+        mode: '0444'
+      become: true
+      
+    - name: enable ooblistener
+      command: systemctl enable ooblistener
+      become: true
+      
+    - name: start ooblistener
+      command: systemctl start ooblistener
+      become: true

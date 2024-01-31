@@ -13,6 +13,11 @@ output "http_channel_webhook" {
   sensitive = true
 }
 
+output "xss_channel_webhook" {
+  value     = discord_webhook.xss.url
+  sensitive = true
+}
+
 output "invite" {
   value = resource.discord_invite.this.id
 }

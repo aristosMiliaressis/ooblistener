@@ -1,23 +1,26 @@
 ---
 
-- name: setup_listener
+- name: setup_interactsh
   hosts: all
   gather_facts: false
+  environment:
+    GOPATH: "/usr/local/go"
+    PATH: "$PATH:/usr/local/go/bin"
   tasks:       
     - name: Install interactsh-server
       command: go install -v github.com/projectdiscovery/interactsh/cmd/interactsh-server@latest
+      become: true
       
     - name: Install interactsh-client
       command: go install -v github.com/projectdiscovery/interactsh/cmd/interactsh-client@latest
-      
-    - name: Install notify
-      command: go install -v github.com/projectdiscovery/notify/cmd/notify@latest
+      become: true
 
     - name: Install anew
       command: go install -v github.com/tomnomnom/anew@latest
-      
+      become: true
+
     - name: Update repositories cache and install "jq" package
-      ansible.builtin.yum:
+      ansible.builtin.dnf:
         name: jq
         update_cache: yes
       become: true
@@ -30,41 +33,16 @@
         group: ec2-user
         mode: '0644'
       become: true
-
+      
     - name: Copy bash script
       ansible.builtin.copy:
-        src:  ../files/bin/start_listener.sh
-        dest: /opt/start_listener.sh
+        src:  ../files/bin/start_interactsh.sh
+        dest: /opt/start_interactsh.sh
         owner: ec2-user
         group: ec2-user
         mode: '0544'
       become: true
-      
-    - name: Copy bash script
-      ansible.builtin.copy:
-        src:  ../files/bin/setup_https.sh
-        dest: /opt/setup_https.sh
-        owner: ec2-user
-        group: ec2-user
-        mode: '0544'
-      become: true
-        
-    - name: Create notify config directory
-      ansible.builtin.file:
-        path: /root/.config/notify/
-        state: directory
-        mode: '0444'
-      become: true
-        
-    - name: Copy notify config
-      ansible.builtin.copy:
-        src:  ../files/conf/provider-config.yaml
-        dest: /root/.config/notify/provider-config.yaml
-        owner: ec2-user
-        group: ec2-user
-        mode: '0644'
-      become: true
-      
+    
     - name: Copy ooblister service file
       ansible.builtin.copy:
         src:  ../files/conf/ooblistener.service
@@ -73,4 +51,3 @@
         group: ec2-user
         mode: '0644'
       become: true
-      
