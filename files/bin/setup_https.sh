@@ -13,7 +13,7 @@ fi
 systemctl restart ooblistener
 
 # wait for ooblistener to generate ssl cert
-sleep 15
+sleep 30
 
 /opt/start_xsshunterlite.sh $DOMAIN
 

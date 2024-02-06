@@ -48,6 +48,10 @@ build {
   }
 
   provisioner "ansible" {
+    playbook_file = "./tasks/setup_python.yml"
+  }
+
+  provisioner "ansible" {
     playbook_file = "./tasks/setup_golang.yml"
   }
 

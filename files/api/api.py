@@ -10,7 +10,10 @@ database = r"/var/www/xsshunterlite/sqlite.db"
 
 app = Flask(__name__)
 CORS(app)
+
+formatter = logging.Formatter(fmt='%(asctime)s %(levelname)-8s %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
 handler = logging.FileHandler("/var/www/xsshunterlite/api.log")
+handler.setFormatter(formatter)
 app.logger.addHandler(handler)
 app.logger.setLevel(logging.INFO)
 

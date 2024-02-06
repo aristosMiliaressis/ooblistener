@@ -13,6 +13,7 @@ terraform -chdir=discord apply -auto-approve -var="discord_token=$discord_token"
 
 dns_channel_webhook=$(terraform -chdir=discord output -raw dns_channel_webhook)
 smtp_channel_webhook=$(terraform -chdir=discord output -raw smtp_channel_webhook)
+smb_channel_webhook=$(terraform -chdir=discord output -raw smb_channel_webhook)
 http_channel_webhook=$(terraform -chdir=discord output -raw http_channel_webhook)
 xss_channel_webhook=$(terraform -chdir=discord output -raw xss_channel_webhook)
 
@@ -33,6 +34,11 @@ discord:
     discord_username: "listenerBot"
     discord_format: "{{data}}"
     discord_webhook_url: "${smtp_channel_webhook}"
+  - id: "smb"
+    discord_channel: "smb"
+    discord_username: "listenerBot"
+    discord_format: "{{data}}"
+    discord_webhook_url: "${smb_channel_webhook}"
   - id: "xss"
     discord_channel: "xss"
     discord_username: "listenerBot"

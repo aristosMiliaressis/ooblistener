@@ -13,6 +13,11 @@ output "http_channel_webhook" {
   sensitive = true
 }
 
+output "smb_channel_webhook" {
+  value     = discord_webhook.smb.url
+  sensitive = true
+}
+
 output "xss_channel_webhook" {
   value     = discord_webhook.xss.url
   sensitive = true
@@ -20,4 +25,5 @@ output "xss_channel_webhook" {
 
 output "invite" {
   value = resource.discord_invite.this.id
+  sensitive = true
 }

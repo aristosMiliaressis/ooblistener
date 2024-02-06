@@ -92,12 +92,34 @@ resource "aws_security_group" "this" {
       security_groups  = []
     },
     {
+      from_port        = 465
+      to_port          = 465
+      protocol         = "tcp"
+      cidr_blocks      = ["0.0.0.0/0"]
+      ipv6_cidr_blocks = ["::/0"]
+      description      = "allow-smtp-autotls"
+      prefix_list_ids  = []
+      self             = false
+      security_groups  = []
+    },
+    {
       from_port        = 587
       to_port          = 587
       protocol         = "tcp"
       cidr_blocks      = ["0.0.0.0/0"]
       ipv6_cidr_blocks = ["::/0"]
       description      = "allow-smtps"
+      prefix_list_ids  = []
+      self             = false
+      security_groups  = []
+    },
+    {
+      from_port        = 445
+      to_port          = 445
+      protocol         = "tcp"
+      cidr_blocks      = ["0.0.0.0/0"]
+      ipv6_cidr_blocks = ["::/0"]
+      description      = "allow-smb"
       prefix_list_ids  = []
       self             = false
       security_groups  = []

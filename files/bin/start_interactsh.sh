@@ -1,5 +1,5 @@
 #!/bin/bash
-set -ux
+set -u
 
 if [ "$EUID" -ne 0 ]
 then
@@ -9,37 +9,40 @@ fi
 
 PATH="$PATH:/usr/local/go/bin"
 
-IP=$(curl -s ifconfig.me)
-DOMAIN=$(cat /opt/domain.txt)
+ip=$(curl -s ifconfig.me)
+domain=$(cat /opt/domain.txt)
+token=$(cat /dev/random | head -c 48 | base64 | tr -d '=')
 
-if [[ ! -f token.txt ]]
-then
-    cat /dev/random | head -c 48 | base64 | tr -d '=' > /opt/token.txt
-fi
-token=$(cat /opt/token.txt)
+interactsh-server -eviction 1 -hi /opt/www/index.html -hd /opt/www -scan-everywhere -dynamic-resp -d $domain \
+     -cidl 1 -cidn 1 -smb -http-port 8 -https-port 4 -ip $ip \
+     -server-header nginx -disable-version -wildcard -t "$token" &
 
-interactsh-server -hi /opt/www/index.html -se -dr -hd /opt/www -d $DOMAIN \
-    -http-port 8 -https-port 4 -ip $IP -csh nginx -dv -wc -t "$token" &
+sleep 10
 
-sleep 2
+mkfifo /opt/interaction.fifo 2>/dev/null
 
+interactsh-client -n 36 -cidl 1 -cidn 1 -asn -no-http-fallback -json -o /opt/interaction.fifo -s https://127.0.0.1:4 -t "$token" &
 while true 
 do
-    timeout 8s interactsh-client -json -o /opt/pingbacks.json -s https://127.0.0.1:4 -t "$token"
+    timeout 1 cat /opt/interaction.fifo > /tmp/interaction.tmp
 
-    cat /opt/pingbacks.json \
-        | grep -iv 'Sec-fetch-Site: same-origin' \
-        | jq -c 'select( .protocol == "http" )' \
+    cat /tmp/interaction.tmp \
+        | jq -c 'select( .protocol == "http" ) | {"remote-address",asninfo,"raw-request"}'| awk '!x[$0]++' \
         | jq -r '"\(."remote-address") \(.asninfo[0].org)\n\(."raw-request")"' \
         | notify -provider-config /opt/provider-config.yaml -silent -bulk -provider discord -id http
 
-    cat /opt/pingbacks.json \
+    cat /tmp/interaction.tmp \
         | jq -c 'select( .protocol == "dns" )' \
         | jq -r '"\(."remote-address") \(.asninfo[0].org)\n\(."raw-request")"' \
         | notify -provider-config /opt/provider-config.yaml -silent -bulk -provider discord -id dns
     
-    cat /opt/pingbacks.json \
+    cat /tmp/interaction.tmp \
         | jq -c 'select( .protocol == "smtp" )' \
         | jq -r '"\(."remote-address") \(.asninfo[0].org)\n\(."raw-request")"' \
         | notify -provider-config /opt/provider-config.yaml -silent -bulk -provider discord -id smtp
+
+    cat /tmp/interaction.tmp \
+        | jq -c 'select( .protocol == "smb" )' \
+        | jq -r '."raw-request"' \
+        | notify -provider-config /opt/provider-config.yaml -silent -bulk -provider discord -id smb
 done

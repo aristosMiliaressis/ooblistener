@@ -6,8 +6,8 @@
   vars:
     version: 1.20.1
     env: |
-      GOPATH=/usr/local/go/
-      PATH=$PATH:/usr/local/go/bin
+      export GOPATH=/usr/local/go/
+      export PATH=$PATH:/usr/local/go/bin
   tasks:
     - name: Download go tar file
       command: wget https://go.dev/dl/go{{version}}.linux-amd64.tar.gz
@@ -22,9 +22,12 @@
       shell: rm -rf go{{version}}.linux-amd64.tar.gz*
       
     - name: Add golang to system-wide $PATH.
-      copy:
-        dest: /etc/profile.d/golang.sh
-        content: "{{ env }}"
+      lineinfile:
+        dest: /etc/bashrc
+        line: "{{ env }}"
+        regexp: "{{ env }}"
+        state: present
+        insertafter: EOF
       become: true
       tags: golang
       

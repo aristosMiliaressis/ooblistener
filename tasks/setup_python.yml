@@ -1,0 +1,45 @@
+---
+
+- name: setup_python
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: Update dnf cache
+      ansible.builtin.dnf:
+        update_cache: yes
+      become: true
+
+    - name: install python3-pip package
+      ansible.builtin.dnf:
+        name: python3-pip
+        state: present
+      become: true
+  
+    - name: Symlink python3 to python
+      ansible.builtin.file:
+        src: /usr/bin/python3
+        dest: /usr/bin/python
+        state: link
+      become: true
+      
+    - name: Symlink pip3 to pip
+      ansible.builtin.file:
+        src: /usr/bin/pip3
+        dest: /usr/bin/pip
+        state: link
+      ignore_errors: true
+      become: true
+    
+    - name: Install virtualenv & pipx
+      ansible.builtin.pip:
+        name: 
+          - virtualenv
+          - pipx
+        state: latest
+
+    - name: Install impacket
+      ansible.builtin.pip:
+        name: impacket
+        state: latest
+      become: true
+      

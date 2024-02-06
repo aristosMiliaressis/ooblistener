@@ -28,9 +28,11 @@ printf "[listener]\n$ec2_ip" > inventory
 sleep 5
 ssh-keyscan -H $ec2_ip | anew ~/.ssh/known_hosts
 
-ansible-playbook ./tasks/start_ooblistener.yml -i inventory --extra-vars "domain=$domain"
+ansible-playbook ./tasks/start_ooblistener.yml -i inventory --key-file ~/.ssh/ooblistener --extra-vars "domain=$domain"
 
 echo "All Done!"
 echo "Now add the following NS records on your domain registry and wait for them to propagate"
-printf "$domain\tNS\t$(dig +short -x $ec2_ip)\n"
-printf "$domain\tNS\tone.one.one.one.\n"
+printf "$domain\tNS\tns1.$domain\n"
+printf "$domain\tNS\tns2.$domain\n"
+printf "ns1.$domain\tA\t$ec2_ip\n"
+printf "ns2.$domain\tA\t$ec2_ip\n"

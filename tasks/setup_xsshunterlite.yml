@@ -19,18 +19,13 @@
         state: present
       become: true
       
-    - name: Update repositories cache and install "python3-pip" package
-      ansible.builtin.dnf:
-        name: python3-pip
-        update_cache: yes
-      become: true
-      
     - name: Install flask & flask_cors
       ansible.builtin.pip:
         name: 
           - flask
           - flask_cors
           - mod_wsgi
+        state: latest
       become: true
      
     - name: Copy bash script

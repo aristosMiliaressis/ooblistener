@@ -1,9 +1,12 @@
 ooblistener
 ==
 
+</br>
+
 **Features**
 - fully automated setup
-- 
+- interactsh notifies on ANY dns, http, smtp or smb interaction
+  - http & https servers are listening on port 8 & 4 (non standard port prevents spam traffic)
 - custom xsshunter
   - No GUI 
   - sqlite3 instead of postgres
@@ -13,11 +16,6 @@ ooblistener
   - exfiltrates everything that xsshunter does 
     - plus local storage & session storage
     - plus request path so that it can be used to transfer extra correlation info
-- 
-- interactsh dns server listening on port 53
-- interactsh smtp server listening on port 25 & 587
-- interactsh http & https servers listening on port 8 & 4
-  - nonstandard port prevents spam traffic
 
 </br>
 
@@ -35,7 +33,6 @@ ooblistener
 - ansible
 - packer
 - aws cli installed & configured
-- certbot
 
 </br>
 
@@ -59,13 +56,3 @@ PS: steps one and two only have to run once, than you can use the `deploy.sh` & 
 PS: the EC2 instance is a t2.micro and you get one of those for free with every aws account so this setup is free if you have no other EC2s in your account.
 
 </br>
-
-**To Do**
-- figure out why interactsh-client breaks when interactsh-server is running on non standard port
-- 
-- add browser ssrf payload to xsshunterlite
-- 
-- bxss fetch referer page if it is same site
-- register service worker for persistence?
--
-- setup interactsh with smb support
