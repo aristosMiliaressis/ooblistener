@@ -14,11 +14,26 @@ resource "aws_instance" "this" {
   associate_public_ip_address = true
   vpc_security_group_ids      = [aws_security_group.this.id]
   key_name                    = aws_key_pair.this.key_name
+
+  provisioner "local-exec" {
+    command = "ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -u ec2-user -i '${self.public_ip},' --key-file ${local.private_key_location} --extra-vars \"domain=${var.domain}\" ../tasks/start_ooblistener.yml"
+  }
+}
+
+resource "tls_private_key" "ssh" {
+  algorithm = "RSA"
+  rsa_bits  = 4096
+}
+
+resource "local_file" "private_key" {
+  content         = tls_private_key.ssh.private_key_pem
+  filename        = local.private_key_location
+  file_permission = "0400"
 }
 
 resource "aws_key_pair" "this" {
-  key_name   = "oob-listener"
-  public_key = var.public_key
+  key_name   = "ooblistener"
+  public_key = tls_private_key.ssh.public_key_openssh
 }
 
 resource "aws_security_group" "this" {
