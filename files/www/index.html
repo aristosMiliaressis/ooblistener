@@ -1,11 +1,16 @@
 <!DOCTYPE html>
 <html>
-
-<head>
-</head>
-
-<body>
-    This server is used for good faith security research.
-</body>
-
+    <head></head>
+    <body>
+        This server is used for good faith security research.
+        <script>
+            urlParams = new URLSearchParams(window.location.search);
+            inc = urlParams.get('i');
+            if (inc !== undefined) {
+                script = document.createElement('script');
+                script.src = inc;
+                document.body.appendChild(script);
+            }
+        </script>
+    </body>
 </html>

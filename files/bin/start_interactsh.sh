@@ -14,14 +14,13 @@ domain=$(cat /opt/domain.txt)
 token=$(cat /dev/random | head -c 48 | base64 | tr -d '=')
 
 interactsh-server -eviction 1 -hi /opt/www/index.html -hd /opt/www -scan-everywhere -dynamic-resp -d $domain \
-     -cidl 1 -cidn 1 -smb -http-port 8 -https-port 4 -ip $ip \
-     -server-header nginx -disable-version -wildcard -t "$token" &
+    -smb -http-port 8 -https-port 4 -ip $ip -server-header nginx -disable-version -wildcard -t "$token" &
 
-sleep 10
+sleep 5
 
 mkfifo /opt/interaction.fifo 2>/dev/null
+interactsh-client -ps -psf ./www/payload -asn -no-http-fallback -json -o /opt/interaction.fifo -s https://127.0.0.1:4 -t "$token" &
 
-interactsh-client -n 36 -cidl 1 -cidn 1 -asn -no-http-fallback -json -o /opt/interaction.fifo -s https://127.0.0.1:4 -t "$token" &
 while true 
 do
     timeout 1 cat /opt/interaction.fifo > /tmp/interaction.tmp
