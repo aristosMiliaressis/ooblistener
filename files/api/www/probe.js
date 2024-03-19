@@ -89,7 +89,7 @@ function hook_load_if_not_ready() {
     }
 }
 
-probe_return_data = {};
+var probe_return_data = {};
 
 // Prevent failure incase the browser refuses to give us any of the probe data.
 try {
