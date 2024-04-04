@@ -23,7 +23,7 @@
       
     - name: Add golang to system-wide $PATH.
       lineinfile:
-        dest: /etc/bashrc
+        dest: /etc/bash.bashrc
         line: "{{ env }}"
         regexp: "{{ env }}"
         state: present

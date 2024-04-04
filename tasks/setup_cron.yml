@@ -2,34 +2,24 @@
 
 - name: setup_cron
   hosts: all
+  become: true
   gather_facts: false
-  tasks:
-    - name: Update repositories cache and install "cronie" package
-      ansible.builtin.dnf:
-        name: cronie
-        update_cache: yes
-      become: true
-    
-    - name: enable crond
-      command: systemctl enable crond
-      become: true
-      
-    - name: start crond
-      command: systemctl start crond
-      become: true
-      
+  tasks: 
+    - name: Update repositories cache and install "cron" package
+      apt:
+        name: cron
+        state: present
+
     - name: Copy bash script
       ansible.builtin.copy:
         src:  ../files/bin/setup_https.sh
         dest: /opt/setup_https.sh
-        owner: ec2-user
-        group: ec2-user
+        owner: ubuntu
+        group: ubuntu
         mode: '0544'
-      become: true
       
     - name: Create cronjob to generate TLS certificate when dns records have propagated
       ansible.builtin.cron:
         name: "check dirs"
         minute: "*/15"
         job: "/opt/setup_https.sh"
-      become: true

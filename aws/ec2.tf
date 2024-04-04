@@ -1,3 +1,31 @@
+### SSH Key Pair
+data "external" "local_home" {
+  program = ["bash", "-c", "echo $HOME | jq --raw-input '. | { home: (.) }'"]
+}
+
+resource "tls_private_key" "ssh" {
+  algorithm = "RSA"
+  rsa_bits  = 4096
+}
+
+resource "local_file" "private_key" {
+  content         = tls_private_key.ssh.private_key_pem
+  filename        = "${data.external.local_home.result.home}/.ssh/ooblistener"
+  file_permission = "0600"
+}
+
+resource "local_file" "public_key" {
+  content         = tls_private_key.ssh.public_key_openssh
+  filename        = "${data.external.local_home.result.home}/.ssh/ooblistener.pub"
+  file_permission = "0644"
+}
+
+resource "aws_key_pair" "this" {
+  key_name   = "ooblistener"
+  public_key = tls_private_key.ssh.public_key_openssh
+}
+
+### pre-build ooblistener AMI
 data "aws_ami" "this" {
   most_recent = true
   owners      = ["self"]
@@ -8,6 +36,7 @@ data "aws_ami" "this" {
   }
 }
 
+# EC2 & security_group
 resource "aws_instance" "this" {
   ami                         = data.aws_ami.this.id
   instance_type               = "t2.micro"
@@ -16,24 +45,12 @@ resource "aws_instance" "this" {
   key_name                    = aws_key_pair.this.key_name
 
   provisioner "local-exec" {
-    command = "ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -u ec2-user -i '${self.public_ip},' --key-file ${local.private_key_location} --extra-vars \"domain=${var.domain}\" ../tasks/start_ooblistener.yml"
+    command = "sleep 10; ssh-keyscan -H ${self.public_ip} | anew ~/.ssh/known_hosts"
   }
-}
-
-resource "tls_private_key" "ssh" {
-  algorithm = "RSA"
-  rsa_bits  = 4096
-}
-
-resource "local_file" "private_key" {
-  content         = tls_private_key.ssh.private_key_pem
-  filename        = local.private_key_location
-  file_permission = "0400"
-}
-
-resource "aws_key_pair" "this" {
-  key_name   = "ooblistener"
-  public_key = tls_private_key.ssh.public_key_openssh
+ 
+ provisioner "local-exec" {
+    command = "ansible-playbook -u ubuntu -i '${self.public_ip},' --key-file ${local_file.private_key.filename} --extra-vars \"domain=${var.domain}\" ../tasks/start_ooblistener.yml"
+  }
 }
 
 resource "aws_security_group" "this" {

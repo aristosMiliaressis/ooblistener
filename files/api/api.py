@@ -20,8 +20,6 @@ app.logger.setLevel(logging.INFO)
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def deliver_probe(path):  
-    app.logger.info('Requested probe')
-
     with open(  os.path.dirname(app.instance_path) + "/www/probe.js", "r", encoding="utf8" ) as probe_handler:
         probejs = probe_handler.read()
               

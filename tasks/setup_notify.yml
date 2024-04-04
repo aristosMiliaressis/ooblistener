@@ -2,6 +2,7 @@
 
 - name: setup_notify
   hosts: all
+  become: true
   gather_facts: false
   environment:
     GOPATH: "/usr/local/go"
@@ -9,21 +10,18 @@
   tasks:       
     - name: Install notify
       command: go install -v github.com/projectdiscovery/notify/cmd/notify@latest
-      become: true
 
     - name: Create notify config directory
       ansible.builtin.file:
         path: /root/.config/notify/
         state: directory
         mode: '0444'
-      become: true
         
     - name: Copy notify config
       ansible.builtin.copy:
         src:  ../files/conf/provider-config.yaml
         dest: /opt/provider-config.yaml
-        owner: ec2-user
-        group: ec2-user
+        owner: ubuntu
+        group: ubuntu
         mode: '0644'
-      become: true
       

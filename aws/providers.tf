@@ -13,10 +13,6 @@ data "external" "aws_region" {
   program = ["bash", "-c", "aws configure get region --profile ${var.profile} | jq --raw-input '. | { region: (.) }'"]
 }
 
-data "external" "local_home" {
-  program = ["bash", "-c", "echo $HOME | jq --raw-input '. | { home: (.) }'"]
-}
-
 provider "aws" {
   profile = var.profile
   region  = data.external.aws_region.result.region

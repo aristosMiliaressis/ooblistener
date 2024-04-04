@@ -4,18 +4,11 @@
   hosts: all
   gather_facts: false
   tasks:
-    - name: Update repositories cache and install "httpd" & "mod_ssl" package
-      ansible.builtin.dnf:
+    - name: Update repositories cache and install "apache/mod_wsgi" package
+      apt:
         name: 
-          - httpd
-          - mod_ssl
-        update_cache: yes
-      become: true
-
-    - name: Install "mod_wsgi" rpm package
-      ansible.builtin.dnf:
-        name: https://rpmfind.net/linux/centos-stream/9-stream/AppStream/x86_64/os/Packages/python3-mod_wsgi-4.7.1-11.el9.x86_64.rpm
-        disable_gpg_check: true
+          - apache2
+          - libapache2-mod-wsgi-py3
         state: present
       become: true
       
@@ -24,7 +17,6 @@
         name: 
           - flask
           - flask_cors
-          - mod_wsgi
         state: latest
       become: true
      
@@ -32,8 +24,8 @@
       ansible.builtin.copy:
         src:  ../files/bin/start_xsshunterlite.sh
         dest: /opt/start_xsshunterlite.sh
-        owner: ec2-user
-        group: ec2-user
+        owner: ubuntu
+        group: ubuntu
         mode: '0544'
       become: true
 
@@ -41,8 +33,8 @@
       ansible.builtin.copy:
         src: ../files/api/
         dest: /var/www/xsshunterlite/
-        owner: ec2-user
-        group: ec2-user
+        owner: ubuntu
+        group: ubuntu
         mode: '0644'
       become: true
       

@@ -4,15 +4,15 @@
   hosts: all
   gather_facts: false
   tasks:
-    - name: Update dnf cache
-      ansible.builtin.dnf:
-        update_cache: yes
+    - name: clean up apt sources
+      command: sudo rm -vf /var/lib/apt/lists/*
       become: true
-
+      
     - name: install python3-pip package
-      ansible.builtin.dnf:
+      apt:
         name: python3-pip
         state: present
+        update_cache: yes
       become: true
   
     - name: Symlink python3 to python

@@ -12,23 +12,21 @@ root_key_filepath="/root/.local/share/certmagic/certificates/acme-v02.api.letsen
 wildcard_cert_filepath="/root/.local/share/certmagic/certificates/acme-v02.api.letsencrypt.org-directory/wildcard_.$domain_name/wildcard_.$domain_name.crt"
 wildcard_key_filepath="/root/.local/share/certmagic/certificates/acme-v02.api.letsencrypt.org-directory/wildcard_.$domain_name/wildcard_.$domain_name.key"
 
-cat >/etc/httpd/conf.d/${domain_name}.conf <<EOF
+cat >/etc/apache2/sites-available/${domain_name}.conf <<EOF
 <VirtualHost *:80>
     ServerName ${domain_name}
     ServerAlias *.${domain_name}
 
-    RewriteEngine On
-    RewriteRule ^(.*)$ https://${domain_name}\$1 [L,R=307]
+    Redirect 307 / https://${domain_name}/
 </VirtualHost>
 
 <VirtualHost *:443>
         ServerName ${domain_name}
 
-        SSLEngine on
         SSLCertificateFile "${root_cert_filepath}"
         SSLCertificateKeyFile "${root_key_filepath}"
 
-        WSGIDaemonProcess xsshunterlite user=apache group=apache threads=5
+        WSGIDaemonProcess xsshunterlite user=www-data group=www-data threads=5
         WSGIProcessGroup xsshunterlite
         WSGIScriptAlias / /var/www/xsshunterlite/api.wsgi
         
@@ -41,11 +39,10 @@ cat >/etc/httpd/conf.d/${domain_name}.conf <<EOF
 <VirtualHost *:443>
         ServerAlias *.${domain_name}
 
-        SSLEngine on
         SSLCertificateFile "${wildcard_cert_filepath}"
         SSLCertificateKeyFile "${wildcard_key_filepath}"
 
-        WSGIDaemonProcess xsshunterlite2 user=apache group=apache threads=5
+        WSGIDaemonProcess xsshunterlite2 user=www-data group=www-data threads=5
         WSGIProcessGroup xsshunterlite2
         WSGIScriptAlias / /var/www/xsshunterlite/api.wsgi
         
@@ -56,5 +53,11 @@ cat >/etc/httpd/conf.d/${domain_name}.conf <<EOF
 </VirtualHost>
 EOF
 
-systemctl enable httpd.service
-systemctl start httpd.service
+a2enmod ssl
+a2enmod rewrite
+a2enmod wsgi
+
+a2ensite ${domain_name}.conf
+a2dissite 000-default.conf
+
+systemctl restart apache2

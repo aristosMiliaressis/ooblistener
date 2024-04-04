@@ -24,7 +24,8 @@ source "amazon-ebs" "ooblistener" {
 
   source_ami_filter {
     filters = {
-      name                = "al2023-ami-2023.*.1-x86_64"
+      architecture        = "x86_64"
+      name                = "ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-*"
       root-device-type    = "ebs"
       virtualization-type = "hvm"
     }
@@ -34,7 +35,7 @@ source "amazon-ebs" "ooblistener" {
 
   instance_type           = "t2.micro"
   region                  = var.region
-  ssh_username            = "ec2-user"
+  ssh_username            = "ubuntu"
   temporary_key_pair_type = "ed25519"
 }
 

@@ -1,7 +1,7 @@
 #!/bin/bash
 
-ec2_ip=$(terraform -chdir=aws output -raw ec2_ip)
-ssh-keygen -R $ec2_ip
+vps_ip=$(terraform -chdir=aws output -raw vps_ip)
+ssh-keygen -R $vps_ip
 
 profile="default"
 

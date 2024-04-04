@@ -2,52 +2,48 @@
 
 - name: setup_interactsh
   hosts: all
+  become: true
   gather_facts: false
   environment:
     GOPATH: "/usr/local/go"
-    PATH: "$PATH:/usr/local/go/bin"
+    PATH: "/bin:/usr/bin:/usr/local/bin:/usr/local/go/bin"
   tasks:       
     - name: Install interactsh-server
       command: go install -v github.com/projectdiscovery/interactsh/cmd/interactsh-server@latest
-      become: true
       
     - name: Install interactsh-client
       command: go install -v github.com/projectdiscovery/interactsh/cmd/interactsh-client@latest
-      become: true
 
     - name: Install anew
       command: go install -v github.com/tomnomnom/anew@latest
-      become: true
 
-    - name: Update repositories cache and install "jq" package
-      ansible.builtin.dnf:
-        name: jq
-        update_cache: yes
-      become: true
-      
+    - name: Install "curl" package
+      apt: 
+        name: 
+          - curl
+          - jq
+        state: present
+
     - name: Copy subresources
       ansible.builtin.copy:
         src: ../files/www/
         dest: /opt/www/
-        owner: ec2-user
-        group: ec2-user
+        owner: ubuntu
+        group: ubuntu
         mode: '0644'
-      become: true
       
     - name: Copy bash script
       ansible.builtin.copy:
         src:  ../files/bin/start_interactsh.sh
         dest: /opt/start_interactsh.sh
-        owner: ec2-user
-        group: ec2-user
+        owner: ubuntu
+        group: ubuntu
         mode: '0544'
-      become: true
     
     - name: Copy ooblister service file
       ansible.builtin.copy:
         src:  ../files/conf/ooblistener.service
         dest: /etc/systemd/system/ooblistener.service
-        owner: ec2-user
-        group: ec2-user
+        owner: ubuntu
+        group: ubuntu
         mode: '0644'
-      become: true
