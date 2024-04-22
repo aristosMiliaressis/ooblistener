@@ -28,22 +28,22 @@
       ansible.builtin.copy:
         src: ../files/www/
         dest: /opt/www/
-        owner: ubuntu
-        group: ubuntu
+        owner: root
+        group: root
         mode: '0644'
       
     - name: Copy bash script
       ansible.builtin.copy:
         src:  ../files/bin/start_interactsh.sh
         dest: /opt/start_interactsh.sh
-        owner: ubuntu
-        group: ubuntu
+        owner: root
+        group: root
         mode: '0544'
     
     - name: Copy ooblister service file
       ansible.builtin.copy:
         src:  ../files/conf/ooblistener.service
         dest: /etc/systemd/system/ooblistener.service
-        owner: ubuntu
-        group: ubuntu
+        owner: root
+        group: root
         mode: '0644'

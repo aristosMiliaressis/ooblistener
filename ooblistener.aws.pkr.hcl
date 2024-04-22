@@ -35,7 +35,7 @@ source "amazon-ebs" "ooblistener" {
 
   instance_type           = "t2.micro"
   region                  = var.region
-  ssh_username            = "ubuntu"
+  ssh_username            = "root"
   temporary_key_pair_type = "ed25519"
 }
 

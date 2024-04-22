@@ -9,8 +9,8 @@
       ansible.builtin.copy:
         content: "{{ domain }}"
         dest: /opt/domain.txt
-        owner: ubuntu
-        group: ubuntu
+        owner: root
+        group: root
         mode: '0444'
 
     - name: stop resolved

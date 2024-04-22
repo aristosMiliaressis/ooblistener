@@ -1,10 +1,15 @@
 #!/bin/bash
 
-vps_ip=$(terraform -chdir=aws output -raw vps_ip)
+PROVIDERS=('aws' 'hetzner')
+
+provider=${1:-aws}
+if [[ ! $(echo ${PROVIDERS[@]} | fgrep -w "$provider") ]]
+then
+    echo "USAGE: $0 <provider [$(echo $PROVIDERS | tr ' ' '|')]>"
+    exit 1
+fi
+
+vps_ip=$(terraform -chdir=terraform/$provider output -raw vps_ip)
 ssh-keygen -R $vps_ip
 
-profile="default"
-
-terraform -chdir=aws destroy -auto-approve \
-            -var="profile=$profile" \
-            -var="domain="
+terraform -chdir=terraform/$provider destroy -auto-approve -var="domain="

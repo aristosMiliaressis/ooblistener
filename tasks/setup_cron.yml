@@ -14,8 +14,8 @@
       ansible.builtin.copy:
         src:  ../files/bin/setup_https.sh
         dest: /opt/setup_https.sh
-        owner: ubuntu
-        group: ubuntu
+        owner: root
+        group: root
         mode: '0544'
       
     - name: Create cronjob to generate TLS certificate when dns records have propagated
