@@ -39,11 +39,3 @@
         owner: root
         group: root
         mode: '0544'
-    
-    - name: Copy ooblister service file
-      ansible.builtin.copy:
-        src:  ../files/conf/ooblistener.service
-        dest: /etc/systemd/system/ooblistener.service
-        owner: root
-        group: root
-        mode: '0644'

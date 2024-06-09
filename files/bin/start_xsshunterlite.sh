@@ -60,4 +60,5 @@ a2enmod wsgi
 a2ensite ${domain_name}.conf
 a2dissite 000-default.conf
 
+systemctl enable apache2
 systemctl restart apache2

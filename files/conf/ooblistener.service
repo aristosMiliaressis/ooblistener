@@ -1,7 +1,7 @@
 [Unit]
 Description=ooblistener
-After=cloud-final.service
-After=crond.service
+After=cloud-init.service
+Requires=crond.service
 
 [Service]
 User=root
@@ -13,4 +13,3 @@ RestartSec=3
 
 [Install]
 WantedBy=multi-user.target
-WantedBy=cloud-init.target
