@@ -1,7 +1,6 @@
 [Unit]
 Description=ooblistener
 After=cloud-init.service
-Requires=crond.service
 
 [Service]
 User=root
