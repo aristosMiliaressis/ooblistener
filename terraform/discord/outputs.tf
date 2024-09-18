@@ -3,6 +3,11 @@ output "dns_channel_webhook" {
   sensitive = true
 }
 
+output "status_channel_webhook" {
+  value     = discord_webhook.status.url
+  sensitive = true
+}
+
 output "smtp_channel_webhook" {
   value     = discord_webhook.smtp.url
   sensitive = true

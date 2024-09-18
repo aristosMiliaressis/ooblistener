@@ -10,6 +10,6 @@ variable "region" {
 }
 
 locals {
-  bot_name    = "listenerBot"
-  server_name = "oobListenerSrv"
+  bot_name    = "ooblistener_bot"
+  server_name = "ooblistener_srv"
 }

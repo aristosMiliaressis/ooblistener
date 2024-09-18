@@ -9,6 +9,13 @@ resource "discord_category_channel" "general" {
   server_id = discord_server.this.id
 }
 
+resource "discord_text_channel" "status" {
+  name                     = "status"
+  server_id                = discord_server.this.id
+  category                 = discord_category_channel.general.id
+  sync_perms_with_category = false
+}
+
 resource "discord_text_channel" "smtp" {
   name                     = "smtp"
   server_id                = discord_server.this.id
@@ -46,6 +53,11 @@ resource "discord_text_channel" "xss" {
 
 resource "discord_webhook" "dns" {
   channel_id = discord_text_channel.dns.id
+  name       = local.bot_name
+}
+
+resource "discord_webhook" "status" {
+  channel_id = discord_text_channel.status.id
   name       = local.bot_name
 }
 
