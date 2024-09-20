@@ -17,16 +17,7 @@ cat >/etc/apache2/sites-available/${domain_name}.conf <<EOF
     ServerName ${domain_name}
     ServerAlias *.${domain_name}
 
-    Redirect 307 / https://${domain_name}/
-</VirtualHost>
-
-<VirtualHost *:443>
-        ServerName ${domain_name}
-
-        SSLCertificateFile "${root_cert_filepath}"
-        SSLCertificateKeyFile "${root_key_filepath}"
-
-        WSGIDaemonProcess xsshunterlite user=www-data group=www-data threads=5
+    WSGIDaemonProcess xsshunterlite user=www-data group=www-data threads=5
         WSGIProcessGroup xsshunterlite
         WSGIScriptAlias / /var/www/xsshunterlite/api.wsgi
         
@@ -37,17 +28,33 @@ cat >/etc/apache2/sites-available/${domain_name}.conf <<EOF
 </VirtualHost>
 
 <VirtualHost *:443>
+        ServerName ${domain_name}
+
+        SSLCertificateFile "${root_cert_filepath}"
+        SSLCertificateKeyFile "${root_key_filepath}"
+
+        WSGIDaemonProcess xsshunterlite-https user=www-data group=www-data threads=5
+        WSGIProcessGroup xsshunterlite-https
+        WSGIScriptAlias / /var/www/xsshunterlite/api.wsgi
+        
+        <Directory /var/www/xsshunterlite>
+            WSGIProcessGroup xsshunterlite-https
+            Require all granted
+        </Directory> 
+</VirtualHost>
+
+<VirtualHost *:443>
         ServerAlias *.${domain_name}
 
         SSLCertificateFile "${wildcard_cert_filepath}"
         SSLCertificateKeyFile "${wildcard_key_filepath}"
 
-        WSGIDaemonProcess xsshunterlite2 user=www-data group=www-data threads=5
-        WSGIProcessGroup xsshunterlite2
+        WSGIDaemonProcess xsshunterlite-wildcard user=www-data group=www-data threads=5
+        WSGIProcessGroup xsshunterlite-wildcard
         WSGIScriptAlias / /var/www/xsshunterlite/api.wsgi
         
         <Directory /var/www/xsshunterlite>
-            WSGIProcessGroup xsshunterlite2
+            WSGIProcessGroup xsshunterlite-wildcard
             Require all granted
         </Directory> 
 </VirtualHost>
