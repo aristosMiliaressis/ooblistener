@@ -19,19 +19,28 @@ app.logger.setLevel(logging.INFO)
 
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
-def deliver_probe(path):  
-    with open(  os.path.dirname(app.instance_path) + "/www/probe.js", "r", encoding="utf8" ) as probe_handler:
-        probejs = probe_handler.read()
+def deliver_probe(path):
+    web_root = os.path.dirname(app.instance_path) + "/www/"
+    commonprefix = os.path.commonprefix((os.path.realpath(web_root + path), web_root))
+    if commonprefix != web_root and commonprefix+"/" != web_root:
+        return "Forbidden", 403
+    
+    if os.path.isfile(path) != True:
+        path = 'probe.js'
+        
+    with open(web_root + path, "r", encoding="utf8") as file_handler:
+        content = file_handler.read()
               
     domain = request.headers.get( 'Host' )
     eval = request.args.get( 'e' )
     if eval is None:
         eval = ""
     
-    probejs = probejs.replace( '[HOST_URL]', "https://" + domain )
-    probejs = probejs.replace( '[CHAINLOAD_REPLACE_ME]', eval )
+    content = content.replace( '[HOSTNAME]', domain )
+    content = content.replace( '[HOST_URL]', "https://" + domain )
+    content = content.replace( '[CHAINLOAD_REPLACE_ME]', eval )
 
-    return Response(probejs, mimetype='text/javascript')
+    return Response(content, mimetype='text/javascript')
 
 @app.route('/js_callback', methods=['POST'])
 def record_interaction():

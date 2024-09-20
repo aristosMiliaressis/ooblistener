@@ -3,7 +3,7 @@
 PROVIDERS=('aws' 'hetzner')
 
 provider=${1:-aws}
-if [[ ! $(echo ${PROVIDERS[@]} | fgrep -w "$provider") ]]
+if [[ ! $(echo ${PROVIDERS[@]} | grep -Fw "$provider") ]]
 then
     echo "USAGE: $0 <provider [$(echo $PROVIDERS | tr ' ' '|')]>"
     exit 1
