@@ -28,20 +28,20 @@ do
     cat /tmp/interaction.tmp \
         | jq -c 'select( .protocol == "http" ) | {"remote-address",asninfo,"raw-request"}'| awk '!x[$0]++' \
         | jq -r '"\(."remote-address") \(.asninfo[0].org)\n\(."raw-request")"' \
-        | notify -provider-config /opt/provider-config.yaml -silent -bulk -provider discord -id http
+        | notify -silent -bulk -provider discord -id http
 
     cat /tmp/interaction.tmp \
         | jq -c 'select( .protocol == "dns" )' \
         | jq -r '"\(."remote-address") \(.asninfo[0].org)\n\(."raw-request")"' \
-        | notify -provider-config /opt/provider-config.yaml -silent -bulk -provider discord -id dns
+        | notify -silent -bulk -provider discord -id dns
     
     cat /tmp/interaction.tmp \
         | jq -c 'select( .protocol == "smtp" )' \
         | jq -r '"\(."remote-address") \(.asninfo[0].org)\n\(."raw-request")"' \
-        | notify -provider-config /opt/provider-config.yaml -silent -bulk -provider discord -id smtp
+        | notify -silent -bulk -provider discord -id smtp
 
     cat /tmp/interaction.tmp \
         | jq -c 'select( .protocol == "smb" )' \
         | jq -r '."raw-request"' \
-        | notify -provider-config /opt/provider-config.yaml -silent -bulk -provider discord -id smb
+        | notify -silent -bulk -provider discord -id smb
 done

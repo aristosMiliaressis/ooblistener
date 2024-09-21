@@ -1,0 +1,6 @@
+---
+os_environment:
+  - key: GOPATH
+    value: /usr/local/go/
+  - key: PATH
+    value: $PATH:/usr/local/go/bin

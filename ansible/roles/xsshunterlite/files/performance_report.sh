@@ -8,4 +8,4 @@ CPU=$(top -bn1 | grep load | awk '{printf "%.2f\n", $(NF-2)}')
 UPTIME=$(uptime | grep -Po '(?<=up )[^,]+')
 
 printf "Memory\t\tDisk\t\tCPU\t\tUptime\n$MEMORY%%\t\t$DISK%\t\t$CPU%%\t\t$UPTIME" \
-    | notify -bulk -provider-config /opt/provider-config.yaml -silent -provider discord -id status
+    | notify -bulk -silent -provider discord -id status

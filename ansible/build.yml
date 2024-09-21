@@ -1,0 +1,10 @@
+---
+- name: build
+  hosts: all
+  gather_facts: false
+  roles:
+    - python
+    - golang
+    - notify
+    - interactsh
+    - xsshunterlite

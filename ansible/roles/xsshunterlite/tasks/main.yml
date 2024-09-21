@@ -1,0 +1,51 @@
+---
+- name: Update repositories cache and install "apache/mod_wsgi" package
+  package:
+    name:
+      - apache2
+      - libapache2-mod-wsgi-py3
+    state: present
+  become: true
+
+- name: Install flask & flask_cors
+  pip:
+    name:
+      - flask
+      - flask_cors
+    state: latest
+
+- name: Copy bash script
+  copy:
+    src: start_xsshunterlite.sh
+    dest: /opt/start_xsshunterlite.sh
+    owner: root
+    group: root
+    mode: "0544"
+  become: true
+
+- name: Copy api source code
+  copy:
+    src: api/
+    dest: /var/www/xsshunterlite/
+    owner: root
+    group: root
+    mode: "0644"
+  become: true
+
+- name: chmod xsshunterlite directory
+  file:
+    path: /var/www/xsshunterlite
+    state: directory
+    mode: "0777"
+  become: true
+
+- name: chmod notify_xss script
+  file:
+    path: /var/www/xsshunterlite/notify_xss.sh
+    state: file
+    mode: "0755"
+  become: true
+
+- name: setup cronjobs
+  include_tasks:
+    file: cron.yml

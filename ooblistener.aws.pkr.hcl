@@ -49,26 +49,6 @@ build {
   }
 
   provisioner "ansible" {
-    playbook_file = "./tasks/setup_python.yml"
-  }
-
-  provisioner "ansible" {
-    playbook_file = "./tasks/setup_golang.yml"
-  }
-
-  provisioner "ansible" {
-    playbook_file = "./tasks/setup_notify.yml"
-  }
-  
-  provisioner "ansible" {
-    playbook_file = "./tasks/setup_interactsh.yml"
-  }
-  
-  provisioner "ansible" {
-    playbook_file = "./tasks/setup_xsshunterlite.yml"
-  }
-  
-  provisioner "ansible" {
-    playbook_file = "./tasks/setup_cron.yml"
+    playbook_file = "./ansible/build.yml"
   }
 }

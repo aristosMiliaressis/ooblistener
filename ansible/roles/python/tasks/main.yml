@@ -1,0 +1,33 @@
+---
+- name: clean up apt sources
+  command: rm -vf /var/lib/apt/lists/*
+  become: true
+
+- name: install python3-pip package
+  package:
+    name: python3-pip
+    state: present
+    update_cache: yes
+  become: true
+
+- name: Symlink python3 to python
+  file:
+    src: /usr/bin/python3
+    dest: /usr/bin/python
+    state: link
+  become: true
+
+- name: Symlink pip3 to pip
+  file:
+    src: /usr/bin/pip3
+    dest: /usr/bin/pip
+    state: link
+  ignore_errors: true
+  become: true
+
+- name: Install virtualenv & pipx
+  pip:
+    name:
+      - virtualenv
+      - pipx
+    state: latest

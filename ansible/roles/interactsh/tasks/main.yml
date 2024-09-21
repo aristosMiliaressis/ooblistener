@@ -1,0 +1,50 @@
+---
+- name: Install interactsh-server
+  shell: |
+    . /etc/profile.d/golang.sh
+    go install -v github.com/projectdiscovery/interactsh/cmd/interactsh-server@latest
+  become: true
+
+- name: Install interactsh-client
+  shell: |
+    . /etc/profile.d/golang.sh
+    go install -v github.com/projectdiscovery/interactsh/cmd/interactsh-client@latest
+  become: true
+
+- name: Install anew
+  shell: |
+    . /etc/profile.d/golang.sh
+    go install -v github.com/tomnomnom/anew@latest
+  become: true
+
+- name: Install impacket
+  pip:
+    name: impacket
+    state: latest
+  become: true
+
+- name: Install "curl" package
+  package:
+    name:
+      - curl
+      - jq
+    state: present
+  become: true
+
+- name: Copy subresources
+  copy:
+    src: index.html
+    dest: /opt/www/
+    owner: root
+    group: root
+    mode: "0644"
+  become: true
+
+- name: Copy bash script
+  copy:
+    src: start_interactsh.sh
+    dest: /opt/start_interactsh.sh
+    owner: root
+    group: root
+    mode: "0544"
+  become: true

@@ -1,0 +1,22 @@
+---
+- name: Install notify
+  shell: |
+    . /etc/profile.d/golang.sh
+    go install -v github.com/projectdiscovery/notify/cmd/notify@latest
+  become: true
+
+- name: Create notify config directory
+  file:
+    path: /root/.config/notify/
+    state: directory
+    mode: "0444"
+  become: true
+
+- name: Copy notify config
+  copy:
+    src: provider-config.yaml
+    dest: /root/.config/notify/provider-config.yaml
+    owner: root
+    group: root
+    mode: "0644"
+  become: true

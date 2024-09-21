@@ -1,0 +1,36 @@
+---
+- name: Write domain name to file
+  copy:
+    content: "{{ domain }}"
+    dest: /opt/domain.txt
+    owner: root
+    group: root
+    mode: "0444"
+  become: true
+
+- name: stop resolved
+  systemd_service:
+    name: systemd-resolved
+    enabled: false
+    state: stopped
+  become: true
+
+- name: setup default DNS resolver
+  command: sed -i 's/127.0.0.53/8.8.8.8/' /etc/resolv.conf
+  become: true
+
+- name: Copy ooblister service file
+  copy:
+    src: ooblistener.service
+    dest: /etc/systemd/system/ooblistener.service
+    owner: root
+    group: root
+    mode: "0644"
+  become: true
+
+- name: start ooblistener
+  systemd_service:
+    name: ooblistener
+    enabled: true
+    state: started
+  become: true

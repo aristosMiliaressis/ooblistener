@@ -18,7 +18,7 @@ smb_channel_webhook=$(terraform -chdir=terraform/discord output -raw smb_channel
 http_channel_webhook=$(terraform -chdir=terraform/discord output -raw http_channel_webhook)
 xss_channel_webhook=$(terraform -chdir=terraform/discord output -raw xss_channel_webhook)
 
-cat >./files/conf/provider-config.yaml <<EOF
+cat >./roles/notify/files/provider-config.yaml <<EOF
 discord:
   - id: "status"
     discord_channel: "status"
