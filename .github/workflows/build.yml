@@ -1,0 +1,40 @@
+name: build
+
+on:
+  push:
+    branches:
+      - "**"
+  schedule:
+    - cron: "0 0 * * *"
+
+jobs:
+  build-snapshot:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout subject branch
+        uses: actions/checkout@v3
+
+      - name: Setup pre-commit
+        run: |
+          sudo apt-get install --yes python3-pip
+          sudo pip3 install pre-commit
+
+      - name: Cache pre-commit hooks
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache/pre-commit
+          key: ${{ runner.os }}-precommit-${{ hashFiles('.pre-commit-config.yaml') }}
+
+      - name: Run pre-commit
+        run: pre-commit run --all-files
+
+      - name: Cache Vagrant boxes
+        uses: actions/cache@v2
+        with:
+          path: ~/.vagrant.d/boxes
+          key: ${{ runner.os }}-vagrant-${{ hashFiles('Vagrantfile') }}
+          restore-keys: |
+            ${{ runner.os }}-vagrant-
+
+      - name: Run vagrant up
+        run: vagrant up
