@@ -9,15 +9,17 @@ on:
 
 jobs:
   build-snapshot:
-    runs-on: ubuntu-latest
+    runs-on: macos-10.15
     steps:
       - name: Checkout subject branch
         uses: actions/checkout@v3
 
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
       - name: Setup pre-commit
-        run: |
-          sudo apt-get install --yes python3-pip
-          sudo pip3 install pre-commit
+        run: sudo pip3 install pre-commit
 
       - name: Cache pre-commit hooks
         uses: actions/cache@v2
