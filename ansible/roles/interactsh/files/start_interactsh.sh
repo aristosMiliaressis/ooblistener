@@ -21,7 +21,7 @@ sleep 5
 mkfifo /opt/interaction.fifo 2>/dev/null
 interactsh-client -ps -psf ./www/payload -asn -no-http-fallback -json -o /opt/interaction.fifo -s https://127.0.0.1:4 -t "$token" &
 
-while true 
+while true
 do
     timeout 1 cat /opt/interaction.fifo > /tmp/interaction.tmp
 
@@ -34,7 +34,7 @@ do
         | jq -c 'select( .protocol == "dns" )' \
         | jq -r '"\(."remote-address") \(.asninfo[0].org)\n\(."raw-request")"' \
         | notify -silent -bulk -provider discord -id dns
-    
+
     cat /tmp/interaction.tmp \
         | jq -c 'select( .protocol == "smtp" )' \
         | jq -r '"\(."remote-address") \(.asninfo[0].org)\n\(."raw-request")"' \

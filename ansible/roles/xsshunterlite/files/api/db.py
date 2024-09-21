@@ -34,7 +34,7 @@ def insert_interaction(conn, entry):
     placeholders = "?" + ", ?" * (len(entry)-1)
     sql = 'INSERT INTO interactions ({}) VALUES ({});'.format(columns, placeholders)
     values = [int(x) if isinstance(x, bool) else x for x in entry.values()]
-    
+
     c = conn.cursor()
     c.execute(sql, values)
     conn.commit()

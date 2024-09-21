@@ -24,18 +24,18 @@ def deliver_probe(path):
     commonprefix = os.path.commonprefix((os.path.realpath(web_root + path), web_root))
     if commonprefix != web_root and commonprefix+"/" != web_root:
         return "Forbidden", 403
-    
+
     if os.path.isfile(path) != True:
         path = 'probe.js'
-        
+
     with open(web_root + path, "r", encoding="utf8") as file_handler:
         content = file_handler.read()
-              
+
     domain = request.headers.get( 'Host' )
     eval = request.args.get( 'e' )
     if eval is None:
         eval = ""
-    
+
     content = content.replace( '[HOSTNAME]', domain )
     content = content.replace( '[HOST_URL]', "https://" + domain )
     content = content.replace( '[CHAINLOAD_REPLACE_ME]', eval )
@@ -45,13 +45,13 @@ def deliver_probe(path):
 @app.route('/js_callback', methods=['POST'])
 def record_interaction():
     app.logger.info('Recording callback')
-    
+
     json = request.get_json(force=True)
     json['client_ip'] = request.remote_addr
 
     notificationText='xss callback from {}|{}\n'.format(json['client_ip'],json['url'])
     run(['/var/www/xsshunterlite/notify_xss.sh'], stdout=PIPE, input=notificationText.encode('utf-8'))
-    
+
     try:
         conn = create_connection(database)
         insert_interaction(conn, json)

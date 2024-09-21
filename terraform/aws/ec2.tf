@@ -47,8 +47,8 @@ resource "aws_instance" "this" {
   provisioner "local-exec" {
     command = "sleep 10; ssh-keyscan -H ${self.public_ip} | anew ~/.ssh/known_hosts"
   }
- 
- provisioner "local-exec" {
+
+  provisioner "local-exec" {
     command = "ansible-playbook -u ubuntu -i '${self.public_ip},' --key-file ${local_file.private_key.filename} --extra-vars \"domain=${var.domain}\" ../../ansible/deploy.yml"
   }
 }

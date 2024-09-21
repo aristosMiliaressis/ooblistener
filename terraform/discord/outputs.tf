@@ -29,6 +29,6 @@ output "xss_channel_webhook" {
 }
 
 output "invite" {
-  value = resource.discord_invite.this.id
+  value     = resource.discord_invite.this.id
   sensitive = true
 }

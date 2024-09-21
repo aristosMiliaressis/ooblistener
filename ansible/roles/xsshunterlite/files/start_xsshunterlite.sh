@@ -20,11 +20,11 @@ cat >/etc/apache2/sites-available/${domain_name}.conf <<EOF
     WSGIDaemonProcess xsshunterlite user=www-data group=www-data threads=5
         WSGIProcessGroup xsshunterlite
         WSGIScriptAlias / /var/www/xsshunterlite/api.wsgi
-        
+
         <Directory /var/www/xsshunterlite>
             WSGIProcessGroup xsshunterlite
             Require all granted
-        </Directory> 
+        </Directory>
 </VirtualHost>
 
 <VirtualHost *:443>
@@ -36,11 +36,11 @@ cat >/etc/apache2/sites-available/${domain_name}.conf <<EOF
         WSGIDaemonProcess xsshunterlite-https user=www-data group=www-data threads=5
         WSGIProcessGroup xsshunterlite-https
         WSGIScriptAlias / /var/www/xsshunterlite/api.wsgi
-        
+
         <Directory /var/www/xsshunterlite>
             WSGIProcessGroup xsshunterlite-https
             Require all granted
-        </Directory> 
+        </Directory>
 </VirtualHost>
 
 <VirtualHost *:443>
@@ -52,11 +52,11 @@ cat >/etc/apache2/sites-available/${domain_name}.conf <<EOF
         WSGIDaemonProcess xsshunterlite-wildcard user=www-data group=www-data threads=5
         WSGIProcessGroup xsshunterlite-wildcard
         WSGIScriptAlias / /var/www/xsshunterlite/api.wsgi
-        
+
         <Directory /var/www/xsshunterlite>
             WSGIProcessGroup xsshunterlite-wildcard
             Require all granted
-        </Directory> 
+        </Directory>
 </VirtualHost>
 EOF
 

@@ -8,12 +8,12 @@ ooblistener
 - interactsh notifies on ANY dns, http, smtp or smb interaction
   - http & https servers are listening on port 8 & 4 (non standard port prevents spam traffic)
 - custom xsshunter
-  - No GUI 
+  - No GUI
   - sqlite3 instead of postgres
   - apache mod_wsgi instead of nginx
   - discord notifications instead of email
   - BXSS probe served on all paths
-  - exfiltrates everything that xsshunter does 
+  - exfiltrates everything that xsshunter does
     - plus local storage & session storage
     - plus request path so that it can be used to transfer extra correlation info
 

