@@ -37,5 +37,6 @@ build {
 
   provisioner "ansible" {
     playbook_file = "./ansible/build.yml"
+        ansible_env_vars = [ "ANSIBLE_CONFIG=ansible/ansible.cfg" ]
   }
 }

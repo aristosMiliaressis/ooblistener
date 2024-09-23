@@ -1,21 +1,19 @@
-ooblistener
+ooblistener ![build: tag](https://github.com/aristosMiliaressis/ooblistener/actions/workflows/build.yml/badge.svg)
 ==
 
 </br>
 
 **Features**
-- fully automated setup
-- interactsh notifies on ANY dns, http, smtp or smb interaction
-  - http & https servers are listening on port 8 & 4 (non standard port prevents spam traffic)
-- custom xsshunter
-  - No GUI
-  - sqlite3 instead of postgres
-  - apache mod_wsgi instead of nginx
-  - discord notifications instead of email
-  - BXSS probe served on all paths
-  - exfiltrates everything that xsshunter does
-    - plus local storage & session storage
-    - plus request path so that it can be used to transfer extra correlation info
+- fully automated setup including vps and discord server
+- interactsh is hosted on ports 8:http, 4:https, 25:smtp, 53:dns, 445:smb
+- modified version of xsshunter
+  - generates a cert for the root domain and a wildcard for subdomains.
+  - supports custom file serving.
+  - if no file in the web root matches the path a blind xss probe is returned.
+  - the probe exfiltrate everything that xsshunter does + localStorage.
+  - no http to https redirect (allowing for shorter curl based command injection payloads)
+  - all exfiltrated data is stored in an SQLite db.
+  - notifications are sent to discord.
 
 </br>
 
@@ -42,8 +40,8 @@ ooblistener
 # https://www.writebots.com/discord-bot-token/
 ./create_discord_server.sh $discord_bot_token
 
-# 2) create the AMI
-./create_ami.sh
+# 2) create the snapshot
+./create_snapshot.sh
 
 # 3) deploy EC2
 ./deploy.sh $domain_name
