@@ -14,9 +14,13 @@ jobs:
       - name: Checkout subject branch
         uses: actions/checkout@v3
 
-      - uses: actions/setup-python@v5
+      - name: setup python
+        uses: actions/setup-python@v5
         with:
           python-version: "3.10"
+
+      - name: setup terraform
+        uses: hashicorp/setup-terraform@v3
 
       - name: Install dependencies.
         run: pip3 install pre-commit ansible molecule[docker] molecule-plugins[docker] docker yamllint ansible-lint
