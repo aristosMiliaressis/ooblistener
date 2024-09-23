@@ -31,3 +31,4 @@
       - virtualenv
       - pipx
     state: latest
+  become: true

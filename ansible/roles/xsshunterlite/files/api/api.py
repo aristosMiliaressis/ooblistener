@@ -25,7 +25,7 @@ def deliver_probe(path):
     if commonprefix != web_root and commonprefix+"/" != web_root:
         return "Forbidden", 403
 
-    if os.path.isfile(path) != True:
+    if os.path.isfile(web_root + path) != True:
         path = 'probe.js'
 
     with open(web_root + path, "r", encoding="utf8") as file_handler:

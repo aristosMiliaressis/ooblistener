@@ -13,6 +13,7 @@
       - flask
       - flask_cors
     state: latest
+  become: true
 
 - name: Copy bash script
   copy:
