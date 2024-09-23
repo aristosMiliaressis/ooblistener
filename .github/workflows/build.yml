@@ -40,8 +40,11 @@ jobs:
       - name: Run pre-commit
         run: pre-commit run --all-files
 
-      - name: Run Molecule tests.
-        run: molecule --debug test
+      - name: Run Molecule test
+        uses: gofrolist/molecule-action@v2
+        with:
+          molecule_options: --debug
+          molecule_command: test
         env:
           PY_COLORS: "1"
           ANSIBLE_FORCE_COLOR: "1"
