@@ -19,6 +19,9 @@ jobs:
         with:
           python-version: "3.10"
 
+      - uses: docker-practice/actions-setup-docker@master
+        timeout-minutes: 12
+
       - name: setup terraform
         uses: hashicorp/setup-terraform@v3
 

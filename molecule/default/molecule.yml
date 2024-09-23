@@ -17,5 +17,10 @@ platforms:
     pre_build_image: true
 provisioner:
   name: ansible
+  options:
+    vvv: True
+  config_options:
+    defaults:
+      remote_tmp: /tmp/.ansible-${USER}/tmp
 verifier:
   name: ansible
