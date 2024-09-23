@@ -10,12 +10,6 @@ on:
 jobs:
   build-snapshot:
     runs-on: macos-latest
-    services:
-      docker:
-        image: docker:dind
-        options: --privileged
-        ports:
-          - 2375:2375
     steps:
       - name: Checkout subject branch
         uses: actions/checkout@v3
