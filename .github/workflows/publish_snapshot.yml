@@ -1,4 +1,4 @@
-name: publish_ami
+name: publish_snapshot
 
 on:
   workflow_dispatch:
@@ -17,7 +17,7 @@ jobs:
         uses: unfor19/install-aws-cli-action@v1
 
       - name: create AWS AMI
-        run: ./create_snapshot.sh aws
+        run: chmod +x ./create_snapshot.sh ; ./create_snapshot.sh aws
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
