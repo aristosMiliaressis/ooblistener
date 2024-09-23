@@ -16,7 +16,7 @@ resource "hcloud_server" "this" {
   }
 
   provisioner "local-exec" {
-    command = "ansible-playbook -u root -i '${self.ipv4_address},' --key-file ${local_file.private_key.filename} --extra-vars \"domain=${var.domain}\" ../../ansible/deploy.yml"
+    command = "ansible-playbook -u root -i '${self.ipv4_address},' --key-file ${local_file.private_key.filename} --extra-vars \"domain=${var.domain}\" ../../ansible/start.yml"
   }
 
   public_net {

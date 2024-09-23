@@ -18,10 +18,8 @@ jobs:
         with:
           python-version: "3.10"
 
-      - uses: hashicorp/setup-terraform@v3
-
-      - name: Setup pre-commit
-        run: sudo pip3 install pre-commit
+      - name: Install dependencies.
+        run: pip3 install pre-commit ansible molecule[docker] molecule-plugins[docker] docker yamllint ansible-lint
 
       - name: Cache pre-commit hooks
         uses: actions/cache@v2
@@ -32,13 +30,9 @@ jobs:
       - name: Run pre-commit
         run: pre-commit run --all-files
 
-      - name: Cache Vagrant boxes
-        uses: actions/cache@v2
-        with:
-          path: ~/.vagrant.d/boxes
-          key: ${{ runner.os }}-vagrant-${{ hashFiles('Vagrantfile') }}
-          restore-keys: |
-            ${{ runner.os }}-vagrant-
-
-      - name: Run vagrant up
-        run: vagrant up
+      - name: Run Molecule tests.
+        run: molecule test
+        env:
+          PY_COLORS: "1"
+          ANSIBLE_FORCE_COLOR: "1"
+          MOLECULE_DISTRO: ubuntu2204
