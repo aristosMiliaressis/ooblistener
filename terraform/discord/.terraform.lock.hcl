@@ -6,6 +6,7 @@ provider "registry.terraform.io/lucky3028/discord" {
   constraints = "1.5.0"
   hashes = [
     "h1:WRShUImHmnmW4GjhqZR4KG51fdl5YIeyoeZgmQRqOjQ=",
+    "h1:l6KA3KpyQTbT8C1IJMMXgLlMquL7pCrcozIlxU0Jn9c=",
     "zh:15d137767e8108038340cee252b4101c7764a2ad80c99616279a01413bbe2e32",
     "zh:52c5439e42d36cdd20e9b3ea58cd8ca3b97eb0b6e6e39a6078ed7c36d5946391",
     "zh:84f9c0e7e8195836725b170e9d391de23f41b3ea32902b1603c098be72e832b6",

@@ -25,6 +25,9 @@ jobs:
       - name: Install dependencies.
         run: pip3 install pre-commit ansible molecule[docker] molecule-plugins[docker] docker yamllint ansible-lint
 
+      - name: Installing tflint
+        run: curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | bash
+
       - name: Cache pre-commit hooks
         uses: actions/cache@v2
         with:
