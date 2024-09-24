@@ -10,15 +10,13 @@ lint: |
 platforms:
   - name: instance
     image: geerlingguy/docker-ubuntu2204-ansible:latest
-    command: ""
+    command: "sleep infinity"
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
     privileged: true
     pre_build_image: true
 provisioner:
   name: ansible
-  options:
-    vvv: True
   config_options:
     defaults:
       remote_tmp: /tmp/.ansible-${USER}/tmp
