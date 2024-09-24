@@ -1,7 +1,7 @@
 ---
 - name: Clean up apt sources
   ansible.builtin.file:
-    path: /var/lib/apt/lists/
+    path: /var/lib/apt/lists/*
     state: absent
   become: true
 
