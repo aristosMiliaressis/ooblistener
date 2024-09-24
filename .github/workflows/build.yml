@@ -37,7 +37,6 @@ jobs:
       - name: Run Molecule test
         uses: gofrolist/molecule-action@v2
         with:
-          molecule_options: --debug
           molecule_command: test
         env:
           PY_COLORS: "1"

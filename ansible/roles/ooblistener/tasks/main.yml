@@ -13,6 +13,7 @@
     name: systemd-resolved
     enabled: false
     state: stopped
+  ignore_errors: true
   become: true
 
 - name: setup default DNS resolver

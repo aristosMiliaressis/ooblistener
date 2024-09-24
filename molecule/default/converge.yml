@@ -4,4 +4,3 @@
   gather_facts: false
 
 - import_playbook: ../../ansible/build.yml
-- import_playbook: ../../ansible/start.yml

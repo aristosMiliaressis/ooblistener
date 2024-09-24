@@ -6,6 +6,7 @@ variable "discord_token" {
 
 variable "region" {
   description = "The server region."
+  type        = string
   default     = "us-east"
 }
 
