@@ -28,6 +28,11 @@ jobs:
       - name: Installing tflint
         run: curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | bash
 
+      - name: Installing shfmt
+        run: |
+          curl -o /usr/local/bin/shfmt https://github.com/mvdan/sh/releases/download/v3.9.0/shfmt_v3.9.0_linux_amd64
+          chmod +x /usr/local/bin/shfmt
+
       - name: Cache pre-commit hooks
         uses: actions/cache@v2
         with:
