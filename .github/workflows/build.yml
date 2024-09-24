@@ -31,7 +31,7 @@ jobs:
       - name: Installing trivy
         run: |
           curl -o /tmp/trivy_0.55.2_Linux-64bit.dep -L https://github.com/aquasecurity/trivy/releases/download/v0.55.2/trivy_0.55.2_Linux-64bit.deb
-          dpkg -i /tmp/trivy_0.55.2_Linux-64bit.dep
+          sudo dpkg -i /tmp/trivy_0.55.2_Linux-64bit.dep
           rm /tmp/trivy_0.55.2_Linux-64bit.dep
 
       - name: Installing shfmt
