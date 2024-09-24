@@ -12,6 +12,7 @@
   ansible.builtin.unarchive:
     src: /tmp/go{{ version }}.linux-amd64.tar.gz
     dest: /usr/local
+    remote_src: true
     extra_opts:
       - --no-same-owner
   become: true
