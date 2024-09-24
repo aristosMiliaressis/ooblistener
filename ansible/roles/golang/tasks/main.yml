@@ -1,18 +1,25 @@
 ---
 - name: Include variables.
-  include_vars: main.yml
+  ansible.builtin.include_vars: main.yml
 
 - name: Download go tar file
-  get_url:
-    url: https://go.dev/dl/go{{version}}.linux-amd64.tar.gz
-    dest: /tmp/go{{version}}.linux-amd64.tar.gz
+  ansible.builtin.get_url:
+    url: https://go.dev/dl/go{{ version }}.linux-amd64.tar.gz
+    dest: /tmp/go{{ version }}.linux-amd64.tar.gz
+    mode: 444
 
 - name: Extract and move new go folder to /usr/local
-  command: tar -C /usr/local -xzf /tmp/go{{version}}.linux-amd64.tar.gz
+  ansible.builtin.unarchive:
+    src: /tmp/go{{ version }}.linux-amd64.tar.gz
+    dest: /usr/local
+    extra_opts:
+      - --no-same-owner
   become: true
 
 - name: Delete downloaded tar file
-  command: rm -rf /tmp/go{{version}}.linux-amd64.tar.gz*
+  ansible.builtin.file:
+    path: /tmp/go{{ version }}.linux-amd64.tar.gz
+    state: absent
 
 - name: Create golang system-wide environment file
   ansible.builtin.file:
@@ -22,10 +29,10 @@
   become: true
 
 - name: Add golang environment vars system-wide.
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: /etc/profile.d/golang.sh
     state: present
     regexp: "^export {{ item.key }}="
-    line: "export {{ item.key }}={{ item.value}}"
+    line: "export {{ item.key }}={{ item.value }}"
   with_items: "{{ os_environment }}"
   become: true

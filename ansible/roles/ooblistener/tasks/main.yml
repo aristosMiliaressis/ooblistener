@@ -1,6 +1,6 @@
 ---
 - name: Write domain name to file
-  copy:
+  ansible.builtin.copy:
     content: "{{ domain }}"
     dest: /opt/domain.txt
     owner: root
@@ -8,20 +8,22 @@
     mode: "0444"
   become: true
 
-- name: stop resolved
-  systemd_service:
+- name: Stop resolved
+  ansible.builtin.systemd_service:
     name: systemd-resolved
     enabled: false
     state: stopped
-  ignore_errors: true
   become: true
 
-- name: setup default DNS resolver
-  command: sed -i 's/127.0.0.53/8.8.8.8/' /etc/resolv.conf
+- name: Setup default DNS resolver
+  ansible.builtin.lineinfile:
+    path: /etc/resolv.conf
+    regexp: '127\.0\.0\.53'
+    line: 8.8.8.8
   become: true
 
 - name: Copy ooblister service file
-  copy:
+  ansible.builtin.copy:
     src: ooblistener.service
     dest: /etc/systemd/system/ooblistener.service
     owner: root
@@ -29,8 +31,8 @@
     mode: "0644"
   become: true
 
-- name: start ooblistener
-  systemd_service:
+- name: Start ooblistener
+  ansible.builtin.systemd_service:
     name: ooblistener
     enabled: true
     state: started

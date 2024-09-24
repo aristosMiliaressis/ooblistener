@@ -11,11 +11,22 @@ repos:
       - id: check-executables-have-shebangs
       - id: check-merge-conflict
 
+  - repo: https://github.com/ansible/ansible-lint.git
+    rev: v6.16.0
+    hooks:
+      - id: ansible-lint
+        files: ^(ansible|molecule)/.*\.(yml|yaml)$
+        verbose: true
+
   - repo: https://github.com/antonbabenko/pre-commit-terraform
     rev: v1.96.1
     hooks:
       - id: terraform_fmt
+        args: ["--hook-config=--parallelism-ci-cpu-cores=2"]
       - id: terraform_tflint
+      - id: terraform_trivy
+        files: ^terraform/
+        args: ["--hook-config=--parallelism-ci-cpu-cores=2"]
 
   - repo: https://github.com/Lucas-C/pre-commit-hooks
     rev: v1.5.5

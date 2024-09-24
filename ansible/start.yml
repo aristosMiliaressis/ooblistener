@@ -1,5 +1,5 @@
 ---
-- name: deploy
+- name: Start
   hosts: all
   gather_facts: false
   roles:

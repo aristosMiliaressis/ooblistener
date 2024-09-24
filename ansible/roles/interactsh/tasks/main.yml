@@ -1,30 +1,44 @@
 ---
+- name: Check installed tools
+  ansible.builtin.shell: |
+    . /etc/profile.d/golang.sh
+    ls $GOPATH/bin
+  register: gotools
+  changed_when: false
+  become: true
+
 - name: Install interactsh-server
-  shell: |
+  ansible.builtin.shell: |
     . /etc/profile.d/golang.sh
     go install -v github.com/projectdiscovery/interactsh/cmd/interactsh-server@latest
+  when: '"interactsh-server" not in gotools.stdout_lines'
+  changed_when: true
   become: true
 
 - name: Install interactsh-client
-  shell: |
+  ansible.builtin.shell: |
     . /etc/profile.d/golang.sh
     go install -v github.com/projectdiscovery/interactsh/cmd/interactsh-client@latest
+  when: '"interactsh-client" not in gotools.stdout_lines'
+  changed_when: true
   become: true
 
 - name: Install anew
-  shell: |
+  ansible.builtin.shell: |
     . /etc/profile.d/golang.sh
     go install -v github.com/tomnomnom/anew@latest
+  when: '"anew" not in gotools.stdout_lines'
+  changed_when: true
   become: true
 
 - name: Install impacket
-  pip:
+  ansible.builtin.pip:
     name: impacket
-    state: latest
+    state: present
   become: true
 
 - name: Install "curl" package
-  package:
+  ansible.builtin.package:
     name:
       - curl
       - jq
@@ -32,7 +46,7 @@
   become: true
 
 - name: Copy subresources
-  copy:
+  ansible.builtin.copy:
     src: index.html
     dest: /opt/www/
     owner: root
@@ -41,7 +55,7 @@
   become: true
 
 - name: Copy bash script
-  copy:
+  ansible.builtin.copy:
     src: start_interactsh.sh
     dest: /opt/start_interactsh.sh
     owner: root

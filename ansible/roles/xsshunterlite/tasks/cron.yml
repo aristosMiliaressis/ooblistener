@@ -1,12 +1,12 @@
 ---
-- name: Update repositories cache and install "cron" package
-  package:
+- name: cron | Update repositories cache and install "cron" package
+  ansible.builtin.package:
     name: cron
     state: present
   become: true
 
-- name: Copy setup_https script
-  copy:
+- name: cron | Copy setup_https script
+  ansible.builtin.copy:
     src: setup_https.sh
     dest: /opt/setup_https.sh
     owner: root
@@ -14,8 +14,8 @@
     mode: "0544"
   become: true
 
-- name: Copy performance_report script
-  copy:
+- name: cron | Copy performance_report script
+  ansible.builtin.copy:
     src: performance_report.sh
     dest: /usr/bin/performance_report.sh
     owner: root
@@ -23,23 +23,23 @@
     mode: "0544"
   become: true
 
-- name: Create cronjob to generate TLS certificate when dns records have propagated
-  cron:
+- name: cron | Create cronjob to generate TLS certificate when dns records have propagated
+  ansible.builtin.cron:
     name: "check dirs"
     minute: "*/15"
     job: "/opt/setup_https.sh"
   become: true
 
-- name: Create cronjob to send performance report
-  cron:
+- name: cron | Create cronjob to send performance report
+  ansible.builtin.cron:
     name: "performance report"
     minute: "0"
     hour: "10"
     job: "/usr/bin/performance_report.sh"
   become: true
 
-- name: Create cronjob to reboot the server
-  cron:
+- name: cron | Create cronjob to reboot the server
+  ansible.builtin.cron:
     name: "reboot server"
     weekday: "1"
     minute: "0"

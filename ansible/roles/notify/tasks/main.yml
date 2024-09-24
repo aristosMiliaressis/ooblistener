@@ -1,19 +1,29 @@
 ---
+- name: Check installed tools
+  ansible.builtin.shell: |
+    . /etc/profile.d/golang.sh
+    ls $GOPATH/bin
+  register: gotools
+  changed_when: false
+  become: true
+
 - name: Install notify
-  shell: |
+  ansible.builtin.shell: |
     . /etc/profile.d/golang.sh
     go install -v github.com/projectdiscovery/notify/cmd/notify@latest
+  when: '"notify" not in gotools.stdout_lines'
+  changed_when: true
   become: true
 
 - name: Create notify config directory
-  file:
+  ansible.builtin.file:
     path: /root/.config/notify/
     state: directory
     mode: "0444"
   become: true
 
 - name: Copy notify config
-  copy:
+  ansible.builtin.copy:
     src: provider-config.yaml
     dest: /root/.config/notify/provider-config.yaml
     owner: root

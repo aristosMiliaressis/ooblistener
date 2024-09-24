@@ -3,4 +3,5 @@
   hosts: instance
   gather_facts: false
 
-- import_playbook: ../../ansible/build.yml
+- name: Build snapshot
+  import_playbook: ../../ansible/build.yml

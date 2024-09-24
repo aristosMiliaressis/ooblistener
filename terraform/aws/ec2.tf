@@ -43,6 +43,13 @@ resource "aws_instance" "this" {
   associate_public_ip_address = true
   vpc_security_group_ids      = [aws_security_group.this.id]
   key_name                    = aws_key_pair.this.key_name
+  metadata_options {
+    http_tokens = "required"
+  }
+
+  root_block_device {
+    encrypted = true
+  }
 
   provisioner "local-exec" {
     command = "sleep 10; ssh-keyscan -H ${self.public_ip} | anew ~/.ssh/known_hosts"
@@ -53,8 +60,10 @@ resource "aws_instance" "this" {
   }
 }
 
+#trivy:ignore:AVD-AWS-0104
 resource "aws_security_group" "this" {
-  name = "ooblistener-sg"
+  name        = "ooblistener-sg"
+  description = "ooblistener ec2 security group"
 
   ingress = [
     {
@@ -185,5 +194,6 @@ resource "aws_security_group" "this" {
     to_port     = 0
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
+    description = "allow egress traffic to any ipv4"
   }
 }
