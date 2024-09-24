@@ -42,10 +42,10 @@ jobs:
       - name: Run pre-commit
         run: pre-commit run --all-files
 
-      - name: Run Molecule test
+      - name: Run Molecule converge
         uses: gofrolist/molecule-action@v2
         with:
-          molecule_command: test
+          molecule_command: converge
         env:
           PY_COLORS: "1"
           ANSIBLE_FORCE_COLOR: "1"
