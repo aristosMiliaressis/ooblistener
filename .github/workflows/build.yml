@@ -47,6 +47,8 @@ jobs:
 
       - name: Run pre-commit
         run: pre-commit run --all-files
+        env:
+          SKIP: terraform_trivy
 
       - name: Run Molecule converge
         uses: gofrolist/molecule-action@v2
@@ -57,4 +59,3 @@ jobs:
           PY_COLORS: "1"
           ANSIBLE_FORCE_COLOR: "1"
           MOLECULE_DISTRO: ubuntu2204
-          SKIP: terraform_trivy
