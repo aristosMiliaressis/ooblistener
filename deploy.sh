@@ -10,9 +10,9 @@ then
     exit 1
 fi
 
-terraform -chdir=terraform/$provider init
-terraform -chdir=terraform/$provider apply -auto-approve -var="domain=$domain"
-vps_ip=$(terraform -chdir=terraform/$provider output -raw vps_ip)
+terraform -chdir=infra/$provider init
+terraform -chdir=infra/$provider apply -auto-approve -var="domain=$domain"
+vps_ip=$(terraform -chdir=infra/$provider output -raw vps_ip)
 
 echo "All Done!"
 echo "Now add the following NS records on your domain registry and wait for them to propagate"

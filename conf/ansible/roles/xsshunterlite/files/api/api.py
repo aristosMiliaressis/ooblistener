@@ -17,8 +17,8 @@ handler.setFormatter(formatter)
 app.logger.addHandler(handler)
 app.logger.setLevel(logging.INFO)
 
-@app.route('/', defaults={'path': ''})
-@app.route('/<path:path>')
+@app.route('/', defaults={'path': ''},methods = ['POST','GET','PUT','PATCH','DELETE'])
+@app.route('/<path:path>',methods = ['POST','GET','PUT','PATCH','DELETE'])
 def deliver_probe(path):
     web_root = os.path.dirname(app.instance_path) + "/www/"
     commonprefix = os.path.commonprefix((os.path.realpath(web_root + path), web_root))

@@ -8,17 +8,17 @@ fi
 
 discord_token=$1
 
-terraform -chdir=terraform/discord init
-terraform -chdir=terraform/discord apply -auto-approve -var="discord_token=$discord_token"
+terraform -chdir=infra/discord init
+terraform -chdir=infra/discord apply -auto-approve -var="discord_token=$discord_token"
 
-status_channel_webhook=$(terraform -chdir=terraform/discord output -raw status_channel_webhook)
-dns_channel_webhook=$(terraform -chdir=terraform/discord output -raw dns_channel_webhook)
-smtp_channel_webhook=$(terraform -chdir=terraform/discord output -raw smtp_channel_webhook)
-smb_channel_webhook=$(terraform -chdir=terraform/discord output -raw smb_channel_webhook)
-http_channel_webhook=$(terraform -chdir=terraform/discord output -raw http_channel_webhook)
-xss_channel_webhook=$(terraform -chdir=terraform/discord output -raw xss_channel_webhook)
+status_channel_webhook=$(terraform -chdir=infra/discord output -raw status_channel_webhook)
+dns_channel_webhook=$(terraform -chdir=infra/discord output -raw dns_channel_webhook)
+smtp_channel_webhook=$(terraform -chdir=infra/discord output -raw smtp_channel_webhook)
+smb_channel_webhook=$(terraform -chdir=infra/discord output -raw smb_channel_webhook)
+http_channel_webhook=$(terraform -chdir=infra/discord output -raw http_channel_webhook)
+xss_channel_webhook=$(terraform -chdir=infra/discord output -raw xss_channel_webhook)
 
-cat >./roles/notify/files/provider-config.yaml <<EOF
+cat >./conf/ansible/roles/notify/files/provider-config.yaml <<EOF
 discord:
   - id: "status"
     discord_channel: "status"
@@ -52,5 +52,5 @@ discord:
     discord_webhook_url: "${xss_channel_webhook}"
 EOF
 
-invite=$(terraform -chdir=terraform/discord output -raw invite)
+invite=$(terraform -chdir=infra/discord output -raw invite)
 echo "Use this invite '$invite' to access the server"

@@ -52,6 +52,7 @@ jobs:
         uses: gofrolist/molecule-action@v2
         with:
           molecule_command: converge
+          molecule_working_dir: conf/
         env:
           PY_COLORS: "1"
           ANSIBLE_FORCE_COLOR: "1"

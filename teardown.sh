@@ -9,7 +9,7 @@ then
     exit 1
 fi
 
-vps_ip=$(terraform -chdir=terraform/$provider output -raw vps_ip)
+vps_ip=$(terraform -chdir=infra/$provider output -raw vps_ip)
 ssh-keygen -R $vps_ip
 
-terraform -chdir=terraform/$provider destroy -auto-approve -var="domain="
+terraform -chdir=infra/$provider destroy -auto-approve -var="domain="

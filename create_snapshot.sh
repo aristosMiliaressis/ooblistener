@@ -9,13 +9,13 @@ then
     exit 1
 fi
 
-packer init ooblistener.$provider.pkr.hcl
+packer init infra/$provider/ooblistener.pkr.hcl
 
 if [[ $provider == "aws" ]]
 then
     region=$(aws configure get region --profile "default")
-    packer build -var "region=$region" ooblistener.aws.pkr.hcl
+    packer build -var "region=$region" infra/$provider/ooblistener.pkr.hcl
 elif [[ $provider == "hetzner" ]]
 then
-    packer build ooblistener.hetzner.pkr.hcl
+    packer build infra/$provider/ooblistener.pkr.hcl
 fi
