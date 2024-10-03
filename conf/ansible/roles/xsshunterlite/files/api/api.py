@@ -3,6 +3,7 @@ from flask import Flask, request, Response
 from db import create_connection, insert_interaction, create_db
 from flask_cors import CORS
 from subprocess import run, PIPE
+import mimetypes
 import logging
 import os
 
@@ -28,6 +29,7 @@ def deliver_probe(path):
     if os.path.isfile(web_root + path) != True:
         path = 'probe.js'
 
+    mime_type, encoding = mimetypes.guess_type(web_root + path)
     with open(web_root + path, "r", encoding="utf8") as file_handler:
         content = file_handler.read()
 
@@ -40,7 +42,7 @@ def deliver_probe(path):
     content = content.replace( '[HOST_URL]', "https://" + domain )
     content = content.replace( '[CHAINLOAD_REPLACE_ME]', eval )
 
-    return Response(content, mimetype='text/javascript')
+    return Response(content, mimetype=mime_type)
 
 @app.route('/js_callback', methods=['POST'])
 def record_interaction():
