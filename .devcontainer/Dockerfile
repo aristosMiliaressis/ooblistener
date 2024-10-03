@@ -18,9 +18,8 @@ RUN pipx install --include-deps pre-commit ansible \
     && .venv/bin/pip install molecule[docker] molecule-plugins[docker] ansible-lint
 
 RUN curl -OJ https://releases.hashicorp.com/terraform/1.6.5/terraform_1.6.5_linux_amd64.zip \
-    && unzip terraform_1.6.5_linux_amd64.zip \
-    && rm terraform_1.6.5_linux_amd64.zip \
-    && mv terraform /usr/local/bin/
+    && unzip -d /usr/local/bin terraform_1.6.5_linux_amd64.zip \
+    && rm terraform_1.6.5_linux_amd64.zip
 
 RUN curl -OJ https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip \
     && unzip awscli-exe-linux-x86_64.zip \
@@ -28,9 +27,10 @@ RUN curl -OJ https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip \
     && ./aws/install --update \
     && rm -rf ./aws
 
-RUN curl -OJ https://releases.hashicorp.com/packer/1.11.2/packer_1.11.2_darwin_amd64.zip \
-    && unzip -d /usr/local/bin packer_1.11.2_darwin_amd64.zip \
-    && rm packer_1.11.2_darwin_amd64.zip
+RUN curl https://apt.releases.hashicorp.com/gpg | gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg \
+    && echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com noble main" | tee /etc/apt/sources.list.d/hashicorp.list \
+    && apt update \
+    && apt install packer
 
 RUN curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | bash
 
@@ -42,5 +42,3 @@ RUN curl -o /usr/local/bin/shfmt https://github.com/mvdan/sh/releases/download/v
    && chmod +x /usr/local/bin/shfmt
 
 RUN echo 'export LC_ALL="C.UTF-8"' >> ~/.profile
-
-#pre-commit install
