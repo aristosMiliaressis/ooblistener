@@ -15,12 +15,10 @@ variable "region" {
   type = string
 }
 
-locals {
-  timestamp = regex_replace(timestamp(), "[- TZ:]", "")
-}
-
 source "amazon-ebs" "ooblistener" {
-  ami_name = "ooblistener-${local.timestamp}"
+  ami_name              = "ooblistener"
+  force_deregister      = true
+  force_delete_snapshot = true
 
   source_ami_filter {
     filters = {
