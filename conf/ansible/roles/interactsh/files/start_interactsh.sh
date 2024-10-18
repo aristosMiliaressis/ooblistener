@@ -10,10 +10,9 @@ fi
 PATH="$PATH:/usr/local/go/bin"
 
 ip=$(curl -s ifconfig.me)
-domain=$(cat /opt/domain.txt)
 token=$(cat /dev/random | head -c 48 | base64 | tr -d '=')
 
-interactsh-server -eviction 0 -hi /opt/www/index.html -hd /opt/www -scan-everywhere -dynamic-resp -d $domain \
+interactsh-server -eviction 0 -hi /opt/www/index.html -hd /opt/www -scan-everywhere -dynamic-resp -d $DOMAIN \
     -smb -http-port 8 -https-port 4 -ip $ip -server-header nginx -disable-version -wildcard -t "$token" &
 
 sleep 5

@@ -1,11 +1,17 @@
 ---
-- name: Write domain name to file
-  ansible.builtin.copy:
-    content: "{{ domain }}"
-    dest: /opt/domain.txt
-    owner: root
-    group: root
-    mode: "0444"
+- name: Create ooblistener system-wide environment file
+  ansible.builtin.file:
+    path: /etc/profile.d/ooblistener.sh
+    state: touch
+    mode: "0644"
+  become: true
+
+- name: Add ooblistener environment vars system-wide.
+  ansible.builtin.lineinfile:
+    path: /etc/profile.d/ooblistener.sh
+    state: present
+    regexp: "^export DOMAIN="
+    line: "export DOMAIN={{ domain }}"
   become: true
 
 - name: Stop resolved

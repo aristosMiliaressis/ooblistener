@@ -5,15 +5,17 @@ ooblistener ![build: tag](https://github.com/aristosMiliaressis/ooblistener/acti
 
 **Features**
 - fully automated setup including vps and discord server
-- interactsh is hosted on ports 8:http, 4:https, 25:smtp, 53:dns, 445:smb
-- modified version of xsshunter
-  - generates a cert for the root domain and a wildcard for subdomains.
+  - interactsh is hosted on ports 8:http, 4:https, 25:smtp, 53:dns, 445:smb
+  - notifications are sent to discord.
+- payload server
   - supports custom file serving.
   - if no file in the web root matches the path a blind xss probe is returned.
-  - the probe exfiltrate everything that xsshunter does + localStorage.
+    - the probe exfiltrate everything that xsshunter does + localStorage.
+    - all exfiltrated data is stored in an SQLite db.
+    - notifications are sent to discord.
+  - generates a cert for the root domain and a wildcard for subdomains.
   - no http to https redirect (allowing for shorter curl based command injection payloads)
-  - all exfiltrated data is stored in an SQLite db.
-  - notifications are sent to discord.
+  - CORS reflection of origin, method & headers
 
 </br>
 
@@ -21,16 +23,6 @@ ooblistener ![build: tag](https://github.com/aristosMiliaressis/ooblistener/acti
 - a domain name
 - an aws account
 - a discord account
-
-</br>
-
-**Dependencies**
-- jq
-- openssh
-- terraform
-- ansible
-- packer
-- aws cli installed & configured
 
 </br>
 
