@@ -15,19 +15,12 @@
   changed_when: true
   become: true
 
-- name: Create notify config directory
-  ansible.builtin.file:
-    path: /root/.config/notify/
-    state: directory
-    mode: "0444"
-  become: true
-
 - name: Copy notify config
   ansible.builtin.copy:
     src: provider-config.yaml
-    dest: /root/.config/notify/provider-config.yaml
-    owner: root
-    group: root
+    dest: /opt/provider-config.yaml
+    owner: ubuntu
+    group: ubuntu
     mode: "0644"
   failed_when: false
   become: true
