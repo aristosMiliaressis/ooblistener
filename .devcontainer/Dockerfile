@@ -21,12 +21,6 @@ RUN curl -OJ https://releases.hashicorp.com/terraform/1.6.5/terraform_1.6.5_linu
     && unzip -d /usr/local/bin terraform_1.6.5_linux_amd64.zip \
     && rm terraform_1.6.5_linux_amd64.zip
 
-RUN curl -OJ https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip \
-    && unzip awscli-exe-linux-x86_64.zip \
-    && rm awscli-exe-linux-x86_64.zip \
-    && ./aws/install --update \
-    && rm -rf ./aws
-
 RUN curl https://apt.releases.hashicorp.com/gpg | gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg \
     && echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com noble main" | tee /etc/apt/sources.list.d/hashicorp.list \
     && apt update \

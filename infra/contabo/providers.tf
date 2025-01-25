@@ -2,9 +2,9 @@ terraform {
   required_version = ">= 0.14"
 
   required_providers {
-    hcloud = {
-      source  = "hetznercloud/hcloud"
-      version = "~> 1.45"
+    contabo = {
+      source  = "contabo/contabo"
+      version = ">= 0.1.28"
     }
     external = {
       source  = "hashicorp/external"
@@ -21,6 +21,9 @@ terraform {
   }
 }
 
-provider "hcloud" {
-  token = var.hcloud_token
+provider "contabo" {
+  oauth2_client_id     = var.client_id
+  oauth2_client_secret = var.client_secret
+  oauth2_user          = var.api_user
+  oauth2_pass          = var.api_pass
 }

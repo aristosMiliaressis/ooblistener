@@ -19,8 +19,8 @@
   ansible.builtin.copy:
     src: provider-config.yaml
     dest: /opt/provider-config.yaml
-    owner: ubuntu
-    group: ubuntu
+    owner: admin
+    group: admin
     mode: "0644"
   failed_when: false
   become: true

@@ -4,7 +4,6 @@
         "context": ".."
     },
     "mounts": [
-        "source=${env:HOME}${env:USERPROFILE}/.aws,target=/root/.aws,type=bind",
         "source=${env:HOME}${env:USERPROFILE}/.ssh,target=/root/.ssh,type=bind"
     ],
     "runArgs": [

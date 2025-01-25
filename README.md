@@ -21,7 +21,7 @@ ooblistener ![build: tag](https://github.com/aristosMiliaressis/ooblistener/acti
 
 **Prerequisites**
 - a domain name
-- an aws account
+- a contabo account
 - a discord account
 
 </br>
@@ -32,17 +32,8 @@ ooblistener ![build: tag](https://github.com/aristosMiliaressis/ooblistener/acti
 # https://www.writebots.com/discord-bot-token/
 ./create_discord_server.sh $discord_bot_token
 
-# 2) create the snapshot
-./create_snapshot.sh
-
-# 3) deploy EC2
+# 2) deploy VPS
 ./deploy.sh $domain_name
 
-# 4) setup glue records as dictated by the output of `deploy.sh` & wait for them to propagate
+# 3) setup glue records as dictated by the output of `deploy.sh` & wait for them to propagate
 ```
-
-PS: steps one and two only have to run once, than you can use the `deploy.sh` & `teardown.sh` scripts to spin up and destroy the server whenever needed.
-
-PS: the EC2 instance is a t2.micro and you get one of those for free with every aws account so this setup is free if you have no other EC2s in your account.
-
-</br>

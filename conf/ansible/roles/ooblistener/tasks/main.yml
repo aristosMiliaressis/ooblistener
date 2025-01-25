@@ -1,17 +1,10 @@
 ---
-- name: Create ooblistener system-wide environment file
-  ansible.builtin.file:
-    path: /etc/profile.d/ooblistener.sh
-    state: touch
-    mode: "0644"
-  become: true
-
 - name: Add ooblistener environment vars system-wide.
   ansible.builtin.lineinfile:
-    path: /etc/profile.d/ooblistener.sh
+    path: /etc/environment
     state: present
-    regexp: "^export DOMAIN="
-    line: "export DOMAIN={{ domain }}"
+    regexp: "^DOMAIN="
+    line: "DOMAIN={{ domain }}"
   become: true
 
 - name: Stop resolved
@@ -24,8 +17,8 @@
 - name: Setup default DNS resolver
   ansible.builtin.lineinfile:
     path: /etc/resolv.conf
-    regexp: '127\.0\.0\.53'
-    line: 8.8.8.8
+    regexp: 'nameserver 127\.0\.0\.53'
+    line: 'nameserver 8.8.8.8'
   become: true
 
 - name: Copy ooblister service file
