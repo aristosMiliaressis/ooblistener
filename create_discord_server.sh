@@ -14,6 +14,7 @@ terraform -chdir=infra/discord apply -auto-approve -var="discord_token=$discord_
 status_channel_webhook=$(terraform -chdir=infra/discord output -raw status_channel_webhook)
 dns_channel_webhook=$(terraform -chdir=infra/discord output -raw dns_channel_webhook)
 smtp_channel_webhook=$(terraform -chdir=infra/discord output -raw smtp_channel_webhook)
+ldap_channel_webhook=$(terraform -chdir=infra/discord output -raw ldap_channel_webhook)
 smb_channel_webhook=$(terraform -chdir=infra/discord output -raw smb_channel_webhook)
 http_channel_webhook=$(terraform -chdir=infra/discord output -raw http_channel_webhook)
 xss_channel_webhook=$(terraform -chdir=infra/discord output -raw xss_channel_webhook)
@@ -40,6 +41,11 @@ discord:
     discord_username: "ooblistener_bot"
     discord_format: "{{data}}"
     discord_webhook_url: "${smtp_channel_webhook}"
+  - id: "ldap"
+    discord_channel: "ldap"
+    discord_username: "ooblistener_bot"
+    discord_format: "{{data}}"
+    discord_webhook_url: "${ldap_channel_webhook}"
   - id: "smb"
     discord_channel: "smb"
     discord_username: "ooblistener_bot"

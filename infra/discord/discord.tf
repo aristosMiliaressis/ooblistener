@@ -23,6 +23,13 @@ resource "discord_text_channel" "smtp" {
   sync_perms_with_category = false
 }
 
+resource "discord_text_channel" "ldap" {
+  name                     = "ldap"
+  server_id                = discord_server.this.id
+  category                 = discord_category_channel.general.id
+  sync_perms_with_category = false
+}
+
 resource "discord_text_channel" "dns" {
   name                     = "dns"
   server_id                = discord_server.this.id
@@ -63,6 +70,11 @@ resource "discord_webhook" "status" {
 
 resource "discord_webhook" "smtp" {
   channel_id = discord_text_channel.smtp.id
+  name       = local.bot_name
+}
+
+resource "discord_webhook" "ldap" {
+  channel_id = discord_text_channel.ldap.id
   name       = local.bot_name
 }
 

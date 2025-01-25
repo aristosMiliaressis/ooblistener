@@ -122,6 +122,17 @@ resource "aws_security_group" "this" {
       security_groups  = []
     },
     {
+      from_port        = 389
+      to_port          = 389
+      protocol         = "tcp"
+      cidr_blocks      = ["0.0.0.0/0"]
+      ipv6_cidr_blocks = ["::/0"]
+      description      = "allow-ldap"
+      prefix_list_ids  = []
+      self             = false
+      security_groups  = []
+    },
+    {
       from_port        = 443
       to_port          = 443
       protocol         = "tcp"
@@ -146,7 +157,7 @@ resource "aws_security_group" "this" {
     {
       from_port        = 587
       to_port          = 587
-      protocol         = "tcp"
+      protocol         = "-1"
       cidr_blocks      = ["0.0.0.0/0"]
       ipv6_cidr_blocks = ["::/0"]
       description      = "allow-smtps"

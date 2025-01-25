@@ -43,4 +43,9 @@ do
         | jq -c 'select( .protocol == "smb" )' \
         | jq -r '."raw-request"' \
         | notify -pc /opt/provider-config.yaml -silent -bulk -provider discord -id smb
+
+    cat /tmp/interaction.tmp \
+        | jq -c 'select( .protocol == "ldap" )' \
+        | jq -r '."raw-request"' \
+        | notify -pc /opt/provider-config.yaml -silent -bulk -provider discord -id ldap
 done

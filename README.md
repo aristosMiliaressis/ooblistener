@@ -5,7 +5,7 @@ ooblistener ![build: tag](https://github.com/aristosMiliaressis/ooblistener/acti
 
 **Features**
 - fully automated setup including vps and discord server
-  - interactsh is hosted on ports 8:http, 4:https, 25:smtp, 53:dns, 445:smb
+  - interactsh is hosted on ports 8:http, 4:https, 25:smtp, 53:dns, 389:ldap, 445:smb
   - notifications are sent to discord.
 - payload server
   - supports custom file serving.

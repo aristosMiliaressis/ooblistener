@@ -13,6 +13,11 @@ output "smtp_channel_webhook" {
   sensitive = true
 }
 
+output "ldap_channel_webhook" {
+  value     = discord_webhook.ldap.url
+  sensitive = true
+}
+
 output "http_channel_webhook" {
   value     = discord_webhook.http.url
   sensitive = true

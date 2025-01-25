@@ -108,6 +108,16 @@ resource "hcloud_firewall" "this" {
 
   rule {
     direction = "in"
+    protocol  = "udp"
+    port      = "389"
+    source_ips = [
+      "0.0.0.0/0",
+      "::/0"
+    ]
+  }
+
+  rule {
+    direction = "in"
     protocol  = "tcp"
     port      = "4"
     source_ips = [
