@@ -1,7 +1,7 @@
 ---
 - name: Check installed tools
   ansible.builtin.shell: |
-    . /etc/profile.d/golang.sh
+    . /etc/profile
     ls $GOPATH/bin
   register: gotools
   changed_when: false
@@ -9,7 +9,7 @@
 
 - name: Install notify
   ansible.builtin.shell: |
-    . /etc/profile.d/golang.sh
+    . /etc/profile
     go install -v github.com/projectdiscovery/notify/cmd/notify@latest
   when: '"notify" not in gotools.stdout_lines'
   changed_when: true

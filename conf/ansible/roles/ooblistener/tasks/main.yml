@@ -1,17 +1,12 @@
 ---
-- name: Create ooblistener system-wide environment file
-  ansible.builtin.file:
-    path: /etc/profile.d/ooblistener.sh
-    state: touch
-    mode: "0644"
-  become: true
-
 - name: Add ooblistener environment vars system-wide.
   ansible.builtin.lineinfile:
     path: /etc/profile.d/ooblistener.sh
     state: present
-    regexp: "^export DOMAIN="
-    line: "export DOMAIN={{ domain }}"
+    regexp: "^DOMAIN="
+    line: "DOMAIN={{ domain }}"
+    create: true
+    mode: '0644'
   become: true
 
 - name: Stop resolved
@@ -21,11 +16,26 @@
     state: stopped
   become: true
 
+- name: Remove systemd's resolv.conf symlink
+  ansible.builtin.file:
+    path: /etc/resolv.conf
+    state: absent
+  become: true
+
+- name: Create regular file resolv.conf
+  ansible.builtin.file:
+    path: /etc/resolv.conf
+    state: touch
+    owner: root
+    group: root
+    mode: "0644"
+  become: true
+
 - name: Setup default DNS resolver
   ansible.builtin.lineinfile:
     path: /etc/resolv.conf
-    regexp: '127\.0\.0\.53'
-    line: 8.8.8.8
+    regexp: 'nameserver 8.8.8.8'
+    line: 'nameserver 8.8.8.8'
   become: true
 
 - name: Copy ooblister service file
@@ -42,4 +52,11 @@
     name: ooblistener
     enabled: true
     state: started
+  become: true
+
+- name: Allow everything and enable UFW
+  community.general.ufw:
+    state: enabled
+    policy: allow
+    direction: incoming
   become: true
