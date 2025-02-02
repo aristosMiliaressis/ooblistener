@@ -10,11 +10,7 @@ resource "contabo_instance" "this" {
   }
 
   provisioner "local-exec" {
-    command = "ansible-playbook -u admin -i '${self.ip_config[0].v4[0].ip},' --key-file ${local_file.private_key.filename} ../../conf/ansible/build.yml"
-  }
-
-  provisioner "local-exec" {
-    command = "ansible-playbook -u admin -i '${self.ip_config[0].v4[0].ip},' --key-file ${local_file.private_key.filename} --extra-vars \"domain=${var.domain}\" ../../conf/ansible/start.yml"
+    command = "ansible-playbook -u admin -i '${self.ip_config[0].v4[0].ip},' --key-file ${local_file.private_key.filename} --extra-vars \"domain=${var.domain}\" ../../conf/ansible/setup.yml"
   }
 }
 

@@ -1,5 +1,5 @@
 ---
-- name: Build
+- name: Setup
   hosts: all
   gather_facts: false
   roles:
@@ -8,3 +8,5 @@
     - notify
     - interactsh
     - exploit_srv
+    - ooblistener
+    - dns_rebind

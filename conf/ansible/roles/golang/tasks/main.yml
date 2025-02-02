@@ -24,9 +24,11 @@
 
 - name: Add golang environment vars system-wide.
   ansible.builtin.lineinfile:
-    path: /etc/environment
+    path: /etc/profile.d/golang.sh
     state: present
-    regexp: "^{{ item.key }}=\"{{ item.value }}"
-    line: "{{ item.key }}=\"{{ item.value }}\""
+    regexp: "^export {{ item.key }}="
+    line: "export {{ item.key }}={{ item.value }}"
+    create: true
+    mode: '0644'
   with_items: "{{ os_environment }}"
   become: true

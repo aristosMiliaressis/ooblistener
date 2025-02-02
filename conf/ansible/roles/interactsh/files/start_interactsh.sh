@@ -1,5 +1,4 @@
 #!/bin/bash
-set -u
 
 if [ "$EUID" -ne 0 ]
 then
@@ -7,7 +6,7 @@ then
     exit 1
 fi
 
-source /etc/environment
+. /etc/profile
 
 ip=$(curl -s -4 ifconfig.me)
 token=$(cat /dev/random | head -c 48 | base64 | tr -d '=')
