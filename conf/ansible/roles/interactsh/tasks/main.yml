@@ -37,10 +37,11 @@
     state: present
   become: true
 
-- name: Install "curl" package
+- name: Install dependencies
   ansible.builtin.package:
     name:
       - curl
+      - docker.io
       - jq
       - parallel
     state: present
